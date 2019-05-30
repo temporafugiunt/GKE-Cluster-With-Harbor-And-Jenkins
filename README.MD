@@ -46,11 +46,11 @@ cd cloud-ops/gke/devops-sandbox-cluster
 
 2) You will be required to log in to your GCP and select the appropriate project gain access to create the proper resources for the cluster:
 
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/01-GCPLogin.PNG "GCP Login")
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/01-GCPLogin.png "GCP Login")
 
 2) You will be required to confirm the permissions you are allowing for this application to your GCP account:
 
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02-GCPPermissions.PNG "GCP Permissions")
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02-GCPPermissions.png "GCP Permissions")
 
 3) After execution is complete, the script will select the new cluster to be the current cluster that any kubectl command will run against
 
