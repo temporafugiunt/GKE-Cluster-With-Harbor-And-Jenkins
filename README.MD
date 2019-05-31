@@ -24,9 +24,30 @@ That application's source is governed by the Apache 2.0 license, see its reposit
 VMs are not the only cost related to GKE in Google Cloud, DB Server instances, dynamically provisioned volumes for kubernetes services, and Application and Container logging also represent important pricing factors, but here is a breakdown of pricing per VM for standard kubernetes cluster sizes as that represents one of the largest factors.
 
 
-| Size              | vCPU | Mem | Temp Storage (SSD) | Max Disks* | Monthly Cost | Long Term Pricing |
-|-------------------|------|-----|--------------------|------------|--------------|-------------------|
-| TODO      | TODO    | TODO   | TODO                  | Unknown          | TODO | TODO |
+| Size              | vCPU | Mem   | Monthly Cost | 1 year reserved  | 3 year reserved |
+|-------------------|------|-------|--------------|------------------|-----------------|
+| n1-standard-1     | 1    | 3.75  |     $24.2725 | ? | ? |
+| n1-highcpu-2      | 2    | 1.80  |       $36.23 | ? | ? |
+| n1-standard-2     | 2    | 7.5   |       $48.55 | ? | ? |
+| n1-highmem-2      | 2    | 13    |       $60.50 | ? | ? |
+| n1-highcpu-4      | 4    | 3.60  |       $72.46 | ? | ? |
+| n1-standard-4     | 4    | 15    |       $97.09 | ? | ? |
+| n1-highmem-4      | 4    | 26    |      $121.00 | ? | ? |
+| n1-highcpu-8      | 8    | 7.20  |      $144.92 | ? | ? |
+| n1-standard-8     | 8    | 30    |      $194.18 | ? | ? |
+| n1-highmem-8      | 8    | 52    |      $242.00 | ? | ? |
+| n1-highcpu-16     | 16   | 14.40 |      $289.84 | ? | ? |
+| n1-standard-16    | 16   | 60    |      $388.36 | ? | ? |
+| n1-highmem-16     | 16   | 104   |      $484.00 | ? | ? |
+| n1-highcpu-32     | 32   | 28.80 |      $579.68 | ? | ? |
+| n1-standard-32    | 32   | 120   |      $776.72 | ? | ? |
+| n1-highmem-32     | 32   | 208   |      $968.00 | ? | ? |
+| n1-highcpu-64     | 64   | 57.6  |     $1159.36 | ? | ? |
+| n1-standard-64    | 64   | 240   |     $1553.44 | ? | ? |
+| n1-highcpu-96     | 96   | 86.4  |     $1739.04 | ? | ? |
+| n1-highmem-64     | 64   | 416   |     $1936.00 | ? | ? |
+| n1-standard-96    | 96   | 360   |     $2330.16 | ? | ? |
+| n1-highmem-96     | 96   | 624   |     $2904.12 | ? | ? |
 
 * The number disks allowed per node is the maximum amount of dynamic or persistent volumes that a cluster can support per node.
 TODO - Verify this is the case for GKE like it is for Azure.
@@ -35,13 +56,13 @@ TODO - Verify this is the case for GKE like it is for Azure.
 
 The latest Google Cloud SDK and python 2.7 need to be installed on the development workstation to run initial GKE cluster provisioning operations.
 
-# Setup Azure Cloud Infrastructure 
+# Setup GCP Cloud Infrastructure 
 
-1) The cloud infrastructure of kubernetes can be setup by running the following command:
+1) The cloud infrastructure of kubernetes and PostgreSQL can be setup by running the following command:
 
 ```bash
 cd cloud-ops/gke/devops-sandbox-cluster
-. ./01-Setup-Cluster.sh
+. ./01-Setup-ClusterAndPostgreSQLEnvironment.sh
 ```
 
 2) You will be required to log in to your GCP and select the appropriate project gain access to create the proper resources for the cluster:
