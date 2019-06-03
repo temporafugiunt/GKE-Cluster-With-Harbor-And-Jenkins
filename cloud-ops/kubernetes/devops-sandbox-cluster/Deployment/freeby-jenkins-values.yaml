@@ -91,7 +91,7 @@ Master:
   ServiceAnnotations: {}
   #   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
   # Used to create Ingress record (should used with ServiceType: ClusterIP)
-  HostName: sandboxbuilds.freebytech.com
+  HostName: sandboxbuilds.ddns.net
   # NodePort: <to set explicitly, choose port between 30000-32767
   # Enable Kubernetes Liveness and Readiness Probes
   # ~ 2 minutes to allow Jenkins to restart when upgrading plugins. Set ReadinessTimeout to be shorter than LivenessTimeout.
@@ -172,9 +172,9 @@ Master:
       kubernetes.io/tls-acme: "true"
 
     TLS:
-      - secretName: sandboxbuilds-freebytech-tls
+      - secretName: sandboxbuilds-ddns-tls
         hosts:
-          - sandboxbuilds.freebytech.com
+          - sandboxbuilds.ddns.net
 
 Agent:
   Enabled: true
@@ -222,7 +222,7 @@ Persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  StorageClass: "managed-premium"
+  StorageClass: ""
 
   Annotations: {}
   AccessMode: ReadWriteOnce

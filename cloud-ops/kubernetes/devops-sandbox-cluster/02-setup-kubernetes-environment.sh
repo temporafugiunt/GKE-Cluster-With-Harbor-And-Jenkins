@@ -8,25 +8,19 @@
 
 export ORIG_DIR=$(pwd)
 
-# Establishes connection to kubernetes cluster.
-. ../../azure/devops-sandbox-cluster/init-kube-connection.sh
+export CLUSTER_FILES_PATH=$ORIG_DIR
+export COMMON_FILES_PATH="$(dirname "$ORIG_DIR")"/common
+export COMMON_BASH_FILES_PATH=$COMMON_FILES_PATH/bash-files
 
-# Reset back to local directory.
-cd $ORIG_DIR
+# # Set necessary secrets as environment variables.
+# #. ../../azure/devops-sandbox-cluster/.secrets/set-sql-server-environment-variables.sh
+. $CLUSTER_FILES_PATH/.secrets/set-external-resources-environment-variables.sh
 
-# Set necessary secrets as environment variables.
-. ../../azure/devops-sandbox-cluster/.secrets/set-sql-server-environment-variables.sh
-. ./.secrets/set-external-resources-environment-variables.sh
-
-# NAMESPACES
-# Create namespace build for jenkins and harbor.
+# # NAMESPACES
+# # Create namespace build for jenkins and harbor.
 kubectl create -f ../common/Namespace/build-namespace.yaml
-# Create the production namespace
+# # Create the production namespace
 kubectl create -f ../common/Namespace/production-namespace.yaml
-
-# DNS RESOLUTIONS
-# Create the local DNS resolution and upstream DNS resolution for the cluster.
-#kubectl apply -f ../common/ConfigMap/externalDnsResolution.yaml
 
 # SERVICE ACCOUNTS
 # Create service account and RBAC for jenkins build server account.
@@ -34,7 +28,7 @@ kubectl create sa jenkins-builder -n build
 kubectl create clusterrolebinding jenkins-cr-binding --clusterrole cluster-admin --serviceaccount=build:jenkins-builder
 
 # With Azure RBAC enabled we need to give the kubernetes-dashboard user proper RBAC administer cluster resources
-kubectl create clusterrolebinding kubernetes-dashboard-cr-binding --clusterrole cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+#kubectl create clusterrolebinding kubernetes-dashboard-cr-binding --clusterrole cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
 
 # Create service account and RBAC for tiller.
 kubectl create sa tiller -n kube-system
@@ -85,10 +79,10 @@ kubectl create secret generic smtp-env-secrets -n production \
     --from-literal=MAIL__SMTPENABLESSL=$MAIL__SMTPENABLESSL
 
 # Setup standard db secrets for use by multiple apps.
-kubectl create secret generic db-env-secrets -n production \
-    --from-literal=DB__SERVERNAME=$AZURE_SQL_SERVER \
-    --from-literal=DB__USERNAME=$AZURE_SQL_SERVER_ADMIN_USER \
-    --from-literal=DB__USERPASSWORD=$AZURE_SQL_SERVER_ADMIN_PASSWORD
+# kubectl create secret generic db-env-secrets -n production \
+#     --from-literal=DB__SERVERNAME=$AZURE_SQL_SERVER \
+#     --from-literal=DB__USERNAME=$AZURE_SQL_SERVER_ADMIN_USER \
+#     --from-literal=DB__USERPASSWORD=$AZURE_SQL_SERVER_ADMIN_PASSWORD
 
 # Setup standard db secrets for use by multiple apps.
 kubectl create secret generic sts-env-secrets -n production \

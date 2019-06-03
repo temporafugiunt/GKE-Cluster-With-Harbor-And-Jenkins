@@ -14,7 +14,7 @@ expose:
     # tls.key that contain the certificate and private key to use for TLS
     # The certificate and private key will be generated automatically if 
     # it is not set
-    secretName:  &tls_secretName "sandboxregistry-freebytech-tls"
+    secretName:  &tls_secretName "sandboxregistry-ddns-tls"
     # By default, the Notary service will use the same cert and key as
     # described above. Fill the name of secret if you want to use a 
     # separated one. Only needed when the type is "ingress".
@@ -24,8 +24,8 @@ expose:
     commonName: ""
   ingress:
     hosts:
-      core: sandboxregistry.freebytech.com
-      notary: sandboxregistry.freebytech.com
+      core: sandboxregistry.ddns.net
+      notary: sandboxregistry.ddns.net
     annotations:
       kubernetes.io/ingress.class: "nginx"
       ingress.kubernetes.io/ssl-redirect: "true"
@@ -79,7 +79,7 @@ expose:
 # the IP address of k8s node 
 # 
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
-externalURL: https://sandboxregistry.freebytech.com
+externalURL: https://sandboxregistry.ddns.net
 
 # The persistence is enabled by default and a default StorageClass
 # is needed in the k8s cluster to provision volumes dynamicly. 
@@ -100,16 +100,16 @@ persistence:
       # Specify the "storageClass" used to provision the volume. Or the default
       # StorageClass will be used(the default).
       # Set it to "-" to disable dynamic provisioning
-      storageClass: "managed-premium"
+      storageClass: ""
       subPath: ""
       accessMode: ReadWriteOnce
-      size: 10Gi
+      size: 20Gi
     chartmuseum:
       existingClaim: ""
-      storageClass: "managed-premium"
+      storageClass: ""
       subPath: ""
       accessMode: ReadWriteOnce
-      size: 10Gi
+      size: 50Gi
     jobservice:
       existingClaim: ""
       storageClass: ""
