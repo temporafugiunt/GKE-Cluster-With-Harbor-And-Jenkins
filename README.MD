@@ -96,7 +96,10 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 4) cert-manager also needs to interact with Let's Encrypt to setup the proper certificates for your websites in an automated way. This means at least two things:
 
-    * You will need to verify in Azure what your cluster's load balancing IP address is.
+    * You will need to verify via kubectl what your cluster's load balancing IP address is.
+
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-Verify-LoadBalancerIP.PNG "Find Load Balancer IP")
+
     * Any domains that you want to be serviced by your cluster you will have to point to the IP address of your kubernetes load balancer. We did this for our example domains:
 
         * https://sandboxregistry.temporafugiunt.com
