@@ -102,9 +102,9 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
     * Any domains that you want to be serviced by your cluster you will have to point to the IP address of your kubernetes load balancer. We did this for our example domains:
 
-        * https://sandboxregistry.temporafugiunt.com
-        * https://sandboxbuilds.temporafugiunt.com
-        * https://sandboxapp.temporafugiunt.com
+        * https://sandboxregistry.ddns.net
+        * https://sandboxbuilds.ddns.net
+        * https://sandboxapp.ddns.net
 
 6) Once that is setup you can access your harbor and jenkins instances (and soon your sandbox application). You may receive a certificate error the first time you try to access a site as the Let's Encrypt certificate creation may not have finished yet. But once that is finished you will have valid certs automatically created for you like these:
 
@@ -112,17 +112,17 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 5) Harbor needs some manual setup as the harbor helm chart does not support automated setup of initial users (beyond the base admin user) and projects. Here are screen shots depicting our playground harbor setup:
 
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/04-SetupPublicProject.PNG "Setup Public Project for freebyJenkinsAgent")
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/04-SetupPublicProject.PNG "Setup Public Project for a local build of freebyJenkinsAgent Docker Image")
 
-6) Once harbor is setup, you can start to create builds and publish the resulting docker images and helm charts to your sandbox harbor registry if you build out your Jekinsfiles using the commands found in our Open Source freebyJenkinsLibrary Global Pipeline Library. That library can be found here: 
+6) Once harbor is setup, you can start to create builds and publish the resulting docker images and helm charts to your sandbox harbor registry if you build out your Jekinsfiles using the commands found in the Open Source freebyJenkinsLibrary Global Pipeline Library. That library can be found here: 
 
-    https://github.com/temporafugiunt/freebyJenkinsLibrary
+    https://github.com/freebyTech/freebyJenkinsLibrary
 
 7) If you wish to use the commands available in this library, you will need to setup a link to the library in your Jenkins configuration like so (or you can fork a copy and link to yours if you are more confortable with that):
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/10-GroovyPipelineLibrarySetup.PNG "Global Pipeline Library Settings")
 
-8) To fully utilize that library the first build you *absolutely need* to setup is the temporafugiunt freebyAgent docker image. Without that image you will not be able to run the special commands necessary for cluster publish operations supported the Global Pipeline Library for builds and release onto the local cluster. Here are screen shots depicting that setup:
+8) To fully utilize that library the first build you *absolutely need* to setup is the Open Source freebyJenkinsImage docker image. Without that image you will not be able to run the special commands necessary for simple cluster publish operations supported by the Global Pipeline Library for builds and releases onto the local cluster. Here are screen shots depicting that setup:
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/05-CreateTheAgentBuild.PNG "Build Screen 1")
 
