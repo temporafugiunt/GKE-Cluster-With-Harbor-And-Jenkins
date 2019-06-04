@@ -10,7 +10,7 @@ Under *cloud-ops/gcp/devops-sandbox-cluster* you will find everything necessary 
 
 Under *cloud-ops/kubernetes/devops-sandbox-cluster* you will find everything necessary for building out the following inside of that kubernetes cluster within GKE:
 
-* A publicly accessible but secured harbor instance that houses docker images and helm charts for this devops sandbox. That instance is accessible at https://sandboxregistry.ddns.net.
+* A publicly accessible but secured Harbor instance that houses docker images and helm charts for this devops sandbox. That instance is accessible at https://sandboxregistry.ddns.net.
 * A publicly accessible but secured jenkins instance that builds the application found in this sandbox repository. That instance is accessible at https://sandboxbuilds.ddns.net.
 
 This kubernetes cluster also tests and is the release environment for the test application contained in *src* and whose helm chart is located under *deploy*, it is accessible at https://sandboxapp.ddns.net. The application under *src* in this repository was originally based off of the React / .NET Core Okta test application found at:
@@ -84,13 +84,13 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 . ./02-setup-kubernetes-environment.sh
 ```
 
-2) Then Istio, the nginx-ingress, acme protocol cert-manager, local harbor service instances, and the local jenkins instance can all be setup by running the following command:
+2) Then Istio, the nginx-ingress, acme protocol cert-manager, local Harbor service instances, and the local jenkins instance can all be setup by running the following command:
 
 ```powershell
 . ./03-install-devops-pipeline-apps.sh
 ```
 
-3) Once these commands are run you can use `kubectl` to verify the status of pods and services of your _build_ namespace inside the cluster. You can also use the GKE Workloads view to verify all your pods are running, you will need to wait a few minutes to allow the containers to all come up as harbor is actually several processes that need to provision their own dynamic volumes:
+3) Once these commands are run you can use `kubectl` to verify the status of pods and services of your _build_ namespace inside the cluster. You can also use the GKE Workloads view to verify all your pods are running, you will need to wait a few minutes to allow the containers to all come up as Harbor is actually several processes that need to provision their own dynamic volumes:
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02b-VerifyBuildEnvironmentStatus.PNG "Kubernetes Status")
 
@@ -106,27 +106,29 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
         * https://sandboxbuilds.ddns.net
         * https://sandboxapp.ddns.net
 
-6) Once that is setup you can access your harbor and jenkins instances (and soon your sandbox application). You may receive a certificate error the first time you try to access a site as the Let's Encrypt certificate creation may not have finished yet. But once that is finished you will have valid certs automatically created for you like these:
+5) Once that is setup you can access your Harbor and jenkins instances (and soon your sandbox application). You can now start to create builds and publish the resulting docker images and helm charts to your sandbox Harbor registry.
+
+6) You may receive a certificate error the first time you try to access a site as the Let's Encrypt certificate creation may not have finished yet. But once that is finished you will have valid certs automatically created for you like these:
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/09-LetsEncryptCert.PNG "temporafugiunt Cert from Let's Encrypt Authority")
 
-5) Harbor needs some manual setup as the harbor helm chart does not support automated setup of initial users (beyond the base admin user) and projects. Here are screen shots depicting our playground harbor setup:
-
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/04-SetupPublicProject.PNG "Setup Public Project for a local build of freebyJenkinsAgent Docker Image")
-
-6) Once harbor is setup, you can start to create builds and publish the resulting docker images and helm charts to your sandbox harbor registry if you build out your Jekinsfiles using the commands found in the Open Source freebyJenkinsLibrary Global Pipeline Library. That library can be found here: 
+7) To simplify builds and publish operations on the cluster, you can build out your Jekinsfile(s) using the commands found in the Open Source freebyJenkinsLibrary Global Pipeline Library. That library can be found here: 
 
     https://github.com/freebyTech/freebyJenkinsLibrary
 
-7) If you wish to use the commands available in this library, you will need to setup a link to the library in your Jenkins configuration like so (or you can fork a copy and link to yours if you are more confortable with that):
+8) If you wish to use the commands available in this library, you will need to setup a link to the library in your Jenkins configuration like so (or a forked copy):
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/10-GroovyPipelineLibrarySetup.PNG "Global Pipeline Library Settings")
 
-8) To fully utilize that library the first build you *absolutely need* to setup is the Open Source freebyJenkinsImage docker image. Without that image you will not be able to run the special commands necessary for simple cluster publish operations supported by the Global Pipeline Library for builds and releases onto the local cluster. Here are screen shots depicting that setup:
+9) To utilize *publish cluster* operations available in the library the first build you *absolutely need* to setup is the Open Source freebyJenkinsImage docker image so it can be pulled from your local Harbor registry. Without that image you will not be able to run the special commands necessary for simple local cluster publish operations supported by the Global Pipeline Library. Here are screen shots depicting that setup:
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/05-CreateTheAgentBuild.PNG "Build Screen 1")
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/06-AgentBuildSettings.PNG "Build Screen 2")
+
+10) You will also need to setup the same project name in Harbor as is defined in the Jenkinsfile for the build of the freebyJenkinsImage repository. Here are screen shots depicting defining the correct project name:
+
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/04-SetupPublicProject.PNG "Setup Public Project for a local build of freebyJenkinsAgent Docker Image")
 
 9) Once the build is setup the server will automatically build the image and publish it to the playground registry as show below:
 
