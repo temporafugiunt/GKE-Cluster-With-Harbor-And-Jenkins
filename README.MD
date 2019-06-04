@@ -6,7 +6,7 @@ This repository demonstrates the necessary steps to setup a GKE Cluster inside o
 
 Under *cloud-ops/gcp/devops-sandbox-cluster* you will find everything necessary for building out the following infrastructure in GCP:
 
-* A 3 node linux cluster of the size [Compute VM Size] that is the DevOps cluster of this project. See the next section for general information regarding standard cluster sizes that can be used with these creation scripts, node count can also be changed easily.
+* A 2 node linux cluster of the size n1-highmem-2 that is the DevOps cluster of this project. See the next section for general information regarding standard cluster sizes that can be used with these creation scripts, node count can also be changed.
 
 Under *cloud-ops/kubernetes/devops-sandbox-cluster* you will find everything necessary for building out the following inside of that kubernetes cluster within GKE:
 
@@ -54,7 +54,7 @@ TODO - Verify this is the case for GKE like it is for Azure.
 
 # Workstation Setup
 
-The latest Google Cloud SDK and python 2.7 need to be installed on the development workstation to run initial GKE cluster provisioning operations.
+The latest Google Cloud SDK and python 2.7 need to be installed on the development workstation to run initial GKE cluster provisioning operations and also to setup the proper credentials and project link to be able to run kubectl and istioctl.
 
 # Setup GCP Cloud Infrastructure 
 
@@ -84,13 +84,13 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 . ./02-setup-kubernetes-environment.sh
 ```
 
-2) Then, the nginx-ingress, acme protocol cert-manager, local harbor service instances, and the local jenkins instance can all be setup by running the following command:
+2) Then Istio, the nginx-ingress, acme protocol cert-manager, local harbor service instances, and the local jenkins instance can all be setup by running the following command:
 
 ```powershell
 . ./03-install-devops-pipeline-apps.sh
 ```
 
-3) Once these commands are run you can use `kubectl proxy` to verify the status of your build environment inside the cluster, you will need to wait a few minutes to allow the containers to all come up as harbor is actually several processes that need to provision their own dynamic volumes:
+3) Once these commands are run you can use `kubectl` to verify the status of pods and services of your _build_ namespace inside the cluster. You can also use the GKE Workloads view to verify all your pods are running, you will need to wait a few minutes to allow the containers to all come up as harbor is actually several processes that need to provision their own dynamic volumes:
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02b-VerifyBuildEnvironmentStatus.PNG "Kubernetes Status")
 
@@ -107,9 +107,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/09-LetsEncryptCert.PNG "temporafugiunt Cert from Let's Encrypt Authority")
 
-5) Harbor needs a couple of manual things setup as the harbor helm chart does not support automated setup of initial users (beyond the base admin user) and projects. Here are screen shots depicting our playground harbor setup:
-
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/03-SetupHarborPublisher.PNG "Setup Jenkins Publishing Agent User")
+5) Harbor needs some manual setup as the harbor helm chart does not support automated setup of initial users (beyond the base admin user) and projects. Here are screen shots depicting our playground harbor setup:
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/04-SetupPublicProject.PNG "Setup Public Project for freebyJenkinsAgent")
 

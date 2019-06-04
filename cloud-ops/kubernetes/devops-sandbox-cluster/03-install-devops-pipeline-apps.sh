@@ -35,19 +35,26 @@ kubectl create -f $COMMON_FILES_PATH/ClusterIssuer/letsencrypt-production.yaml
 # Create a network tester for testing the internal network of the cluster.
 kubectl create -f $COMMON_FILES_PATH/Deployment/busyBoxTester.yaml
 
-# # Setup harbor
-# git clone https://github.com/goharbor/harbor-helm harbor-helm
+# Setup harbor
+git clone https://github.com/goharbor/harbor-helm harbor-helm
 
-# cd ./harbor-helm
+cd ./harbor-helm
 
-# # Commits from 11-21-2018 broke persistence, need to investigate values.yaml changes in future.
-# git checkout -b 1.0.0 origin/1.0.0
+# Commits from 11-21-2018 broke persistence, need to investigate values.yaml changes in future.
+git checkout -b 1.0.0 origin/1.0.0
 
-# helm dependency update
-# helm upgrade --install --namespace build harbor -f ../Deployment/harbor-helm-values.yaml --set harborAdminPassword=$HARBOR_ADMIN_USER_PASSWORD --set secretKey=$HARBOR_SECRET_KEY --set database.internal.password=$HARBOR_ADMIN_USER_PASSWORD .
+helm dependency update
+helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deployment/harbor-helm-values.yaml --set harborAdminPassword=$HARBOR_ADMIN_USER_PASSWORD --set secretKey=$HARBOR_SECRET_KEY --set database.internal.password=$HARBOR_ADMIN_USER_PASSWORD .
+# kubectl exec -it harbor-harbor-database-0 -n build usr/bin/bash
+#   psql -U postgres
+#   \l
+#   \dl
 
 echo 'Sleeping for 30 seconds'
 sleep 30s
+
+
+
 
 # helm delete --purge freeby-jenkins
 helm upgrade --install --namespace build freeby-jenkins -f $CLUSTER_FILES_PATH/Deployment/freeby-jenkins-values.yaml --set Master.AdminUser=$JENKINS_ADMIN_USER --set Master.AdminPassword=$JENKINS_ADMIN_USER_PASSWORD stable/jenkins

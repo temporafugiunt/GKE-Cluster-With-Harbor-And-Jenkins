@@ -22,6 +22,9 @@ kubectl create -f ../common/Namespace/build-namespace.yaml
 # # Create the production namespace
 kubectl create -f ../common/Namespace/production-namespace.yaml
 
+# Create cluster role binding for admin access to the current user.
+kubectl create clusterrolebinding admin-cr-binding --clusterrole cluster-admin --user="$(gcloud config get-value core/account)"
+
 # SERVICE ACCOUNTS
 # Create service account and RBAC for jenkins build server account.
 kubectl create sa jenkins-builder -n build
@@ -40,18 +43,18 @@ kubectl create clusterrolebinding tiller-cr-binding --clusterrole cluster-admin 
 if [ "$REGISTRY_URL" == 'hub.docker.com' ]
 then
     # Create the private docker registry connection secret.
-    kubectl create secret docker-registry freebytech-regcred --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
-    kubectl create secret docker-registry freebytech-regcred -n build --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
-    kubectl create secret docker-registry freebytech-regcred -n production --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n build --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n production --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
 else
     # Create the private docker registry connection secret.
-    kubectl create secret docker-registry freebytech-regcred --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
-    kubectl create secret docker-registry freebytech-regcred -n build --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
-    kubectl create secret docker-registry freebytech-regcred -n production --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n build --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n production --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
 fi
 
 # Give jenkins service account right to pull images from private repository.
-kubectl patch serviceaccount -n build jenkins-builder -p '{"imagePullSecrets": [{"name": "freebytech-regcred"}]}'
+kubectl patch serviceaccount -n build jenkins-builder -p '{"imagePullSecrets": [{"name": "registry-regcred"}]}'
 
 # Create the jenkins credentials.xml file secret.
 kubectl create secret generic jenkins-credentials -n build --from-file ./.secrets/jenkins/credentials.xml
