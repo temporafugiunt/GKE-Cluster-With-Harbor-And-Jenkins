@@ -11,7 +11,7 @@ Under *cloud-ops/gcp/devops-sandbox-cluster* you will find everything necessary 
 Under *cloud-ops/kubernetes/devops-sandbox-cluster* you will find everything necessary for building out the following inside of that kubernetes cluster within GKE:
 
 * A publicly accessible but secured Harbor instance that houses docker images and helm charts for this devops sandbox. That instance is accessible at https://sandboxregistry.ddns.net.
-* A publicly accessible but secured jenkins instance that builds the application found in this sandbox repository. That instance is accessible at https://sandboxbuilds.ddns.net.
+* A publicly accessible but secured Jenkins instance that builds the application found in this sandbox repository. That instance is accessible at https://sandboxbuilds.ddns.net.
 
 This kubernetes cluster also tests and is the release environment for the test application contained in *src* and whose helm chart is located under *deploy*, it is accessible at https://sandboxapp.ddns.net. The application under *src* in this repository was originally based off of the React / .NET Core Okta test application found at:
 
@@ -84,7 +84,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 . ./02-setup-kubernetes-environment.sh
 ```
 
-2) Then Istio, the nginx-ingress, acme protocol cert-manager, local Harbor service instances, and the local jenkins instance can all be setup by running the following command:
+2) Then Istio, the nginx-ingress, acme protocol cert-manager, local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
 
 ```powershell
 . ./03-install-devops-pipeline-apps.sh
@@ -106,7 +106,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
         * https://sandboxbuilds.ddns.net
         * https://sandboxapp.ddns.net
 
-5) Once that is setup you can access your Harbor and jenkins instances (and soon your sandbox application). You can now start to create builds and publish the resulting docker images and helm charts to your sandbox Harbor registry.
+5) Once that is setup you can access your Harbor and Jenkins instances (and soon your sandbox application). You can now start to create builds and publish the resulting docker images and helm charts to your sandbox Harbor registry.
 
 6) You may receive a certificate error the first time you try to access a site as the Let's Encrypt certificate creation may not have finished yet. But once that is finished you will have valid certs automatically created for you like these:
 
