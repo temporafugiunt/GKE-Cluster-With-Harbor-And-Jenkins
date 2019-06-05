@@ -94,7 +94,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02b-VerifyBuildEnvironmentStatus.PNG "Kubernetes Status")
 
-4) istio-ingressgateway acts as the external load balancer and also interacts with Let's Encrypt to setup the proper certificates for your websites in an automated way. This means at least two things:
+4) istio-ingressgateway acts as the external gateway into the cluster and also interacts with Let's Encrypt to setup the proper certificates for your websites in an automated way. This means at least two things:
 
     * You will need to verify via kubectl what your cluster's load balancing IP address is.
 
