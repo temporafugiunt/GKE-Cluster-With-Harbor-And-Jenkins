@@ -98,7 +98,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
     * You will need to verify via kubectl what your cluster's load balancing IP address is.
 
-        ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-Verify-LoadBalancerIP.PNG "Find Load Balancer IP")
+        ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-Verify-LoadBalancerIP-Istio.PNG "Find Load Balancer IP")
 
     * Any domains that you want to be serviced by your cluster you will have to point to the IP address of your kubernetes load balancer. We did this for our example domains:
 
