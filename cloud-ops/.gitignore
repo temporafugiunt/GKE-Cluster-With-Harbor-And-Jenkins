@@ -2,5 +2,7 @@
 .terraform
 helm
 harbor-helm
+istio*
 get_helm.sh
 out.plan
+notes.txt
