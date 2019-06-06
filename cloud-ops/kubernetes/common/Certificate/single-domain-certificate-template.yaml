@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: OBJECT_BASE_NAME-tls
+  namespace: istio-system
+spec:
+  secretName: OBJECT_BASE_NAME-tls
+  issuerRef:
+    name: CERT_ISSUER
+  commonName: DOMAIN_NAME
+  dnsNames:
+  - DOMAIN_NAME
+  acme:
+    config:
+    - http01:
+        ingressClass: istio
+      domains:
+      - DOMAIN_NAME

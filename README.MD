@@ -84,7 +84,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 . ./02-setup-kubernetes-environment.sh
 ```
 
-2) Then Istio, local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
+2) Then install Istio, Jetstack's cert-manager, local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
 
 ```powershell
 . ./03-install-devops-pipeline-apps.sh
@@ -94,7 +94,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02b-VerifyBuildEnvironmentStatus.PNG "Kubernetes Status")
 
-4) istio-ingressgateway acts as the external gateway into the cluster and also interacts with Let's Encrypt to setup the proper certificates for your websites in an automated way. This means at least two things:
+4) istio-ingressgateway acts as the external gateway into the cluster and also interacts with Jetstack's cert-manager using ACME protocol negotiation with the Let's Encrypt Certificate Authority to setup the proper certificates for your websites in an automated way. This means at least two things:
 
     * You will need to verify via kubectl what your cluster's load balancing IP address is.
 
@@ -105,6 +105,9 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
         * https://sandboxregistry.ddns.net
         * https://sandboxbuilds.ddns.net
         * https://sandboxapp.ddns.net
+
+    NOTE: This should be done before running the next bash script as Let's Encrypt and the cluster will attempt to create certificates for all the defined services
+    in the cluster when the certificate secrets are issued in _03-install-devops-pipeline-apps.sh_.
 
 5) Once that is setup you can access your Harbor and Jenkins instances (and soon your sandbox application). You can now start to create builds and publish the resulting docker images and helm charts to your sandbox Harbor registry.
 
