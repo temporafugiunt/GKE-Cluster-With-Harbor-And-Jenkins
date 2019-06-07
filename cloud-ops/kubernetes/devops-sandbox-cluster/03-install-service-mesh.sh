@@ -52,7 +52,9 @@ kubectl label ns production istio-injection=enabled
 kubectl apply -f $COMMON_FILES_PATH/Gateway/istio-cert-manager-gateway.yaml
 
 # Add an HTTP to HTTPS redirector for all communication (needs to exclude Let's Encrypt enquiries on HTTP).
-kubectl apply -f $COMMON_FILES_PATH/redirector/redirector.yaml
+kubectl create ns redirector
+kubectl label ns redirector istio-injection=enabled
+kubectl apply -n redirector -f $COMMON_FILES_PATH/redirector/redirector.yaml
 
 # Add issuers in istio-system namespace, one for staging tests and the other for production release.
 kubectl create -f $COMMON_FILES_PATH/Issuer/letsencrypt-staging.yaml

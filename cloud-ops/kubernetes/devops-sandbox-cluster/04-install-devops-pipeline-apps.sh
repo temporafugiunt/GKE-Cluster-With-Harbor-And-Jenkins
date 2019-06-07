@@ -10,14 +10,24 @@
 # Set the certificate issuer used for applications installed below
 export CERT_ISSUER=letsencrypt-staging-issuer
 
-# Install dynamic certs and their gateways for services defined later in this script.
-export OBJECT_BASE_NAME=sandboxregistry-ddns
-export DOMAIN_NAME=sandboxregistry.ddns.net
-. $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
-
+# Install Jenkins instance and all the Istio specific objects not supported by Helm chart to expose Jenkins properly
+# to the outside world not using Ingress.
 export OBJECT_BASE_NAME=sandboxbuilds-ddns
 export DOMAIN_NAME=sandboxbuilds.ddns.net
 . $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
+
+# # helm delete --purge freeby-jenkins
+helm upgrade --install --namespace build freeby-jenkins \
+    -f $CLUSTER_FILES_PATH/Deployment/freeby-jenkins-values.yaml \
+    --set Master.AdminUser=$JENKINS_ADMIN_USER \
+    --set Master.AdminPassword=$JENKINS_ADMIN_USER_PASSWORD \
+    stable/jenkins
+
+export HOST_NAMESPACE=build
+export HOST_NAME=freeby-jenkins
+export HOST_PORT=8080
+. $COMMON_BASH_FILES_PATH/tie-host-to-gateway-via-vservice.sh
+
 
 export OBJECT_BASE_NAME=sandboxapp-ddns
 export DOMAIN_NAME=sandboxapp.ddns.net
@@ -31,6 +41,10 @@ export HOST_NAME=helloworld
 export HOST_PORT=5000
 . $COMMON_BASH_FILES_PATH/tie-host-to-gateway-via-vservice.sh
 
+
+export OBJECT_BASE_NAME=sandboxregistry-ddns
+export DOMAIN_NAME=sandboxregistry.ddns.net
+. $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
 # # Create a network tester for testing the internal network of the cluster.
 # kubectl create -f $COMMON_FILES_PATH/Deployment/busyBoxTester.yaml
 
@@ -54,7 +68,4 @@ export HOST_PORT=5000
 
 
 
-
-# # helm delete --purge freeby-jenkins
-# helm upgrade --install --namespace build freeby-jenkins -f $CLUSTER_FILES_PATH/Deployment/freeby-jenkins-values.yaml --set Master.AdminUser=$JENKINS_ADMIN_USER --set Master.AdminPassword=$JENKINS_ADMIN_USER_PASSWORD stable/jenkins
 
