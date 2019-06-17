@@ -92,7 +92,7 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 3) After completing execution the script will tell you what your external Load Balancer IP port is, this should be noted used in the next instruction to setup the proper DNS to IP translations for services defined in the cluster:
 
-        ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-ScriptDisplays-LoadBalancerIP-Istio.PNG "Script Displays Load Balancer IP")
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-ScriptDisplays-LoadBalancerIP-Istio.PNG "Script Displays Load Balancer IP")
 
 4) istio-ingressgateway acts as the external gateway into the cluster and also interacts with Jetstack's cert-manager using ACME protocol negotiation with the Let's Encrypt Certificate Authority to setup the proper certificates for your websites in an automated way. This means at least two things:
 
@@ -107,10 +107,6 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
         * https://sandboxapp.ddns.net
 
     NOTE: This should be done before running the next bash script as so that cert-manager and the Let's Encrypt service can attempt to create certificates for all the defined services in the cluster. That way when Gateways are defined in the next script the certificate secrets already exist.
-
-
-
-
 
 4) The local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
 
