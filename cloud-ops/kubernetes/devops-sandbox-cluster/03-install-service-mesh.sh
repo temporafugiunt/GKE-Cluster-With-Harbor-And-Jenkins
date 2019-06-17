@@ -44,9 +44,10 @@ helm install $ISTIO_INSTALL_DIR/install/kubernetes/helm/istio --name instio --na
 echo 'Sleeping for 30 seconds after installing components'
 sleep 30s
 
-# Turn on auto istio sidecar injection in build and production namespaces
+# Turn on auto istio sidecar injection in build, beta, and production namespaces
 kubectl label ns build istio-injection=enabled
 kubectl label ns production istio-injection=enabled
+kubectl label ns beta istio-injection=enabled
 
 # Add update to default external gateway to remove the invalid https portion of the rule.
 kubectl apply -f $COMMON_FILES_PATH/Gateway/istio-cert-manager-gateway.yaml

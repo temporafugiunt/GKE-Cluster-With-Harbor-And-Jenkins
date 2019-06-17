@@ -16,11 +16,18 @@ export COMMON_BASH_FILES_PATH=$COMMON_FILES_PATH/bash-files
 # #. ../../azure/devops-sandbox-cluster/.secrets/set-sql-server-environment-variables.sh
 . $CLUSTER_FILES_PATH/.secrets/set-external-resources-environment-variables.sh
 
-# # NAMESPACES
-# # Create namespace build for jenkins and harbor.
-kubectl create -f ../common/Namespace/build-namespace.yaml
-# # Create the production namespace
-kubectl create -f ../common/Namespace/production-namespace.yaml
+# NAMESPACES
+# Create namespace build for jenkins and harbor.
+export NAMESPACE_NAME=build
+. $COMMON_BASH_FILES_PATH/create-namespace.sh
+
+# Create the production namespace for production versions of apps built in cluster.
+export NAMESPACE_NAME=production
+. $COMMON_BASH_FILES_PATH/create-namespace.sh
+
+# Create the beta namespace namespace for beta versions of apps built in cluster.
+export NAMESPACE_NAME=beta
+. $COMMON_BASH_FILES_PATH/create-namespace.sh
 
 # Create cluster role binding for admin access to the current user.
 kubectl create clusterrolebinding admin-cr-binding --clusterrole cluster-admin --user="$(gcloud config get-value core/account)"

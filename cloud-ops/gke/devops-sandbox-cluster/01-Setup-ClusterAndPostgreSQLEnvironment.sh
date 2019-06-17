@@ -11,7 +11,7 @@ export CLUSTER_ZONE='us-central1-c'
 # gcloud compute zones list | grep us-central1
 
 # Creat the new cluster
-gcloud container clusters create $CLUSTER_NAME --num-nodes 3  --zone $CLUSTER_ZONE --machine-type=n1-highmem-2 --enable-ip-alias --enable-autorepair --enable-autoupgrade
+gcloud container clusters create $CLUSTER_NAME --num-nodes 3  --zone $CLUSTER_ZONE --machine-type=n1-standard-2 --enable-ip-alias --enable-autorepair --enable-autoupgrade
 
 # Get the proper credentials with which to work with kubectl
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE

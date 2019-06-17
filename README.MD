@@ -77,32 +77,24 @@ cd cloud-ops/gke/devops-sandbox-cluster
 
 # Setup Kubernetes Cluster Environment
 
-1) The kubernetes environment can be setup by running the following command starting at the base of this repository:
+1) The base kubernetes environment (namespaces, service accounts, cluster role bindings, and secrets) can be setup by running the following command starting at the base of this repository:
 
-```powershell
+```bash
 cd cloud-ops/kubernetes/devops-sandbox-cluster
 . ./02-setup-kubernetes-environment.sh
 ```
 
-2) The service mesh components (Istio, Jetstack's cert-manager via istio helm chart, and an NginX redirector for port 80 to 443 redirection) can all be setup by running the following command:
+2) The service mesh components of the cluster (Helm, Istio, Jetstack's cert-manager via istio helm chart, and an NginX redirector for port 80 to 443 redirection) can all be setup by running the following command:
 
-```powershell
+```bash
 . ./03-install-service-mesh.sh
 ```
 
-3) The local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
-
-```powershell
-. ./04-install-devops-pipeline-apps.sh
-```
-
-3) Once these commands are run you can use `kubectl` to verify the status of pods and services of your _build_ namespace inside the cluster. You can also use the GKE Workloads view to verify all your pods are running, you will need to wait a few minutes to allow the containers to all come up as Harbor is actually several processes that need to provision their own dynamic volumes:
-
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02b-VerifyBuildEnvironmentStatus.PNG "Kubernetes Status")
+3) After completing execution the script will tell you what your external Load Balancer IP port is, this should be noted used in the next instruction to setup the proper DNS to IP translations for services defined in the cluster:
 
 4) istio-ingressgateway acts as the external gateway into the cluster and also interacts with Jetstack's cert-manager using ACME protocol negotiation with the Let's Encrypt Certificate Authority to setup the proper certificates for your websites in an automated way. This means at least two things:
 
-    * You will need to verify via kubectl what your cluster's load balancing IP address is.
+    * If you didn't make note of the IP address for the external load balancer when running the last script, you can verify via kubectl what your cluster's load balancing IP address is.
 
         ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-Verify-LoadBalancerIP-Istio.PNG "Find Load Balancer IP")
 
@@ -112,8 +104,21 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
         * https://sandboxbuilds.ddns.net
         * https://sandboxapp.ddns.net
 
-    NOTE: This should be done before running the next bash script as Let's Encrypt and the cluster will attempt to create certificates for all the defined services
-    in the cluster when the certificate secrets are issued in _03-install-devops-pipeline-apps.sh_.
+    NOTE: This should be done before running the next bash script as so that cert-manager and the Let's Encrypt service can attempt to create certificates for all the defined services in the cluster. That way when Gateways are defined in the next script the certificate secrets already exist.
+
+
+
+
+
+4) The local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
+
+```powershell
+. ./04-install-devops-pipeline-apps.sh
+```
+
+5) Once these commands are run you can use `kubectl` to verify the status of pods and services of your _build_ namespace inside the cluster. You can also use the GKE Workloads view to verify all your pods are running, you will need to wait a few minutes to allow the containers to all come up as Harbor is actually several processes that need to provision their own dynamic volumes:
+
+![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02b-VerifyBuildEnvironmentStatus.PNG "Kubernetes Status")
 
 5) Once that is setup you can access your Harbor and Jenkins instances (and soon your sandbox application). You can now start to create builds and publish the resulting docker images and helm charts to your sandbox Harbor registry.
 
