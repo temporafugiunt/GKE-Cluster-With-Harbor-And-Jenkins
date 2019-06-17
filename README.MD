@@ -6,7 +6,7 @@ This repository demonstrates the necessary steps to setup a GKE Cluster inside o
 
 Under *cloud-ops/gcp/devops-sandbox-cluster* you will find everything necessary for building out the following infrastructure in GCP:
 
-* A 2 node linux cluster of the size n1-highmem-2 that is the DevOps cluster of this project. See the next section for general information regarding standard cluster sizes that can be used with these creation scripts, node count can also be changed.
+* A 4 node linux cluster of the size n1-standard-2 that is the DevOps cluster of this project. See the next section for general information regarding standard cluster sizes that can be used with these creation scripts, node count can also be changed.
 
 Under *cloud-ops/kubernetes/devops-sandbox-cluster* you will find everything necessary for building out the following inside of that kubernetes cluster within GKE:
 
@@ -84,10 +84,16 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 . ./02-setup-kubernetes-environment.sh
 ```
 
-2) Then install Istio, Jetstack's cert-manager, local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
+2) The service mesh components (Istio, Jetstack's cert-manager via istio helm chart, and an NginX redirector for port 80 to 443 redirection) can all be setup by running the following command:
 
 ```powershell
-. ./03-install-devops-pipeline-apps.sh
+. ./03-install-service-mesh.sh
+```
+
+3) The local Harbor service instances, and the local Jenkins instance can all be setup by running the following command:
+
+```powershell
+. ./04-install-devops-pipeline-apps.sh
 ```
 
 3) Once these commands are run you can use `kubectl` to verify the status of pods and services of your _build_ namespace inside the cluster. You can also use the GKE Workloads view to verify all your pods are running, you will need to wait a few minutes to allow the containers to all come up as Harbor is actually several processes that need to provision their own dynamic volumes:
