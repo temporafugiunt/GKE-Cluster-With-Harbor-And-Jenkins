@@ -92,6 +92,8 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
 3) After completing execution the script will tell you what your external Load Balancer IP port is, this should be noted used in the next instruction to setup the proper DNS to IP translations for services defined in the cluster:
 
+        ![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02c-ScriptDisplays-LoadBalancerIP-Istio.PNG "Script Displays Load Balancer IP")
+
 4) istio-ingressgateway acts as the external gateway into the cluster and also interacts with Jetstack's cert-manager using ACME protocol negotiation with the Let's Encrypt Certificate Authority to setup the proper certificates for your websites in an automated way. This means at least two things:
 
     * If you didn't make note of the IP address for the external load balancer when running the last script, you can verify via kubectl what your cluster's load balancing IP address is.
