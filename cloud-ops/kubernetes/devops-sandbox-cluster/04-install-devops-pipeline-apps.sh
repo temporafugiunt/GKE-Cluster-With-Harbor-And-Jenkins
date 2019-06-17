@@ -16,40 +16,54 @@ export OBJECT_BASE_NAME=sandboxbuilds-ddns
 export DOMAIN_NAME=sandboxbuilds.ddns.net
 . $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
 
-# # helm delete --purge freeby-jenkins
+# helm delete --purge freeby-jenkins
 helm upgrade --install --namespace build freeby-jenkins \
     -f $CLUSTER_FILES_PATH/Deployment/freeby-jenkins-values.yaml \
     --set Master.AdminUser=$JENKINS_ADMIN_USER \
     --set Master.AdminPassword=$JENKINS_ADMIN_USER_PASSWORD \
     stable/jenkins
 
+# Setup https traffic for sandboxbuilds.ddns.net to go to jenkins service.
 export HOST_NAMESPACE=build
 export HOST_NAME=freeby-jenkins
 export HOST_PORT=8080
-. $COMMON_BASH_FILES_PATH/tie-host-to-gateway-via-vservice.sh
+. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
+# Redirect http traffic to https.
+export HOST_NAMESPACE=redirector
+export HOST_NAME=redirect
+export HOST_PORT=80
+. $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
 
+# Setup the Istio Gateway tying https to sandboxapp.ddns.net via a lets encrypt cert.
 export OBJECT_BASE_NAME=sandboxapp-ddns
 export DOMAIN_NAME=sandboxapp.ddns.net
 . $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
 
+# Install the helloworld service into cluster
 kubectl apply -n production -f https://raw.githubusercontent.com/istio/istio/1.1.7/samples/helloworld/helloworld.yaml
 
-# Setup the gateways tying the last cert to helloworld service
+# Tie hello world service to https gateway.
 export HOST_NAMESPACE=production
 export HOST_NAME=helloworld
 export HOST_PORT=5000
-. $COMMON_BASH_FILES_PATH/tie-host-to-gateway-via-vservice.sh
+. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
-
-export OBJECT_BASE_NAME=sandboxregistry-ddns
-export DOMAIN_NAME=sandboxregistry.ddns.net
-. $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
+# Redirect http traffic to https.
+export HOST_NAMESPACE=redirector
+export HOST_NAME=redirect
+export HOST_PORT=80
+. $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
 
 # # Create a network tester for testing the internal network of the cluster.
 # kubectl create -f $COMMON_FILES_PATH/Deployment/busyBoxTester.yaml
 
-# Setup harbor
+# Setup the Istio Gateway tying https to sandboxregistry.ddns.net via a lets encrypt cert.
+export OBJECT_BASE_NAME=sandboxregistry-ddns
+export DOMAIN_NAME=sandboxregistry.ddns.net
+. $COMMON_BASH_FILES_PATH/setup-cert-and-gateway-for-dns-name.sh
+
+# Clone and install harbor into the cluster.
 git clone https://github.com/goharbor/harbor-helm harbor-helm
 
 cd ./harbor-helm
@@ -64,10 +78,15 @@ helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deploymen
 # #   \l
 # #   \dl
 # Setup the gateways tying the last cert to helloworld service
+
+# Tie harbor service to https gateway.
 export HOST_NAMESPACE=build
 export HOST_NAME=harbor
 export HOST_PORT=80
-. $COMMON_BASH_FILES_PATH/tie-host-to-gateway-via-vservice.sh
+. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
+
+# Tie harbor service to http standard k8s gateway.
+. $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
 
 
 # echo 'Sleeping for 30 seconds'

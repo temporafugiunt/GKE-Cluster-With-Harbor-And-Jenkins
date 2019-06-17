@@ -9,7 +9,7 @@
 #   HOST_NAME        = The host to expose, usually a service name.
 #   HOST_PORT        = The host port to expose, usuall a service port.
 
-sed "s/OBJECT_BASE_NAME/$OBJECT_BASE_NAME/g" $COMMON_FILES_PATH/VirtualService/virtual-service-no-subdomain-template.yaml | \
+sed "s/OBJECT_BASE_NAME/$OBJECT_BASE_NAME/g" $COMMON_FILES_PATH/VirtualService/virtual-service-to-named-gateway-no-subdomain-template.yaml | \
     sed --expression="s/DOMAIN_NAME/$DOMAIN_NAME/g" | \
     sed --expression="s/HOST_NAMESPACE/$HOST_NAMESPACE/g" | \
     sed --expression="s/HOST_NAME/$HOST_NAME/g" | \
