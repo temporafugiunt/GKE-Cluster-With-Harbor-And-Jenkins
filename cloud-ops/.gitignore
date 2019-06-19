@@ -2,7 +2,9 @@
 .terraform
 helm
 harbor-helm
-istio*
+istio-*
 get_helm.sh
 out.plan
 notes.txt
+stable-jenkins
+jenkins-*.tgz
