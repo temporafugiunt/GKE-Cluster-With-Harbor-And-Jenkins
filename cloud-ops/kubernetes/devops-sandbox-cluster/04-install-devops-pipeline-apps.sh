@@ -16,16 +16,26 @@ export OBJECT_BASE_NAME=sandboxbuilds-ddns
 export DOMAIN_NAME=sandboxbuilds.ddns.net
 . $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
 
-# helm delete --purge freeby-jenkins
-helm upgrade --install --namespace build freeby-jenkins \
-    -f $CLUSTER_FILES_PATH/Deployment/freeby-jenkins-values.yaml \
-    --set Master.AdminUser=$JENKINS_ADMIN_USER \
-    --set Master.AdminPassword=$JENKINS_ADMIN_USER_PASSWORD \
-    stable/jenkins
+# Clone upstream jenkins helm chart as we need version newer than what
+# is available in stable/jenkins for 
+git clone https://github.com/helm/charts upstream-helm
+
+cd ./upstream-helm/stable/jenkins
+
+# This is the last commit this script was tested against.
+git checkout -b last-tested-commit 991a8bd85277adc27b465519f4fb44d9f3dd2714
+helm dependency update
+
+# helm delete --purge jenkins
+helm upgrade --install --namespace build jenkins \
+    -f $CLUSTER_FILES_PATH/Deployment/standard-jenkins-with-casc.yaml \
+    --set master.adminUser=$JENKINS_ADMIN_USER \
+    --set master.adminPassword=$JENKINS_ADMIN_USER_PASSWORD \
+    --set master.jenkinsUrl=https://$DOMAIN_NAME/ .
 
 # Setup https traffic for sandboxbuilds.ddns.net to go to jenkins service.
 export HOST_NAMESPACE=build
-export HOST_NAME=freeby-jenkins
+export HOST_NAME=jenkins
 export HOST_PORT=8080
 . $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
@@ -35,55 +45,60 @@ export HOST_NAME=redirect
 export HOST_PORT=80
 . $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
 
-# Setup the Istio Gateway tying https to sandboxapp.ddns.net via a lets encrypt cert.
-export OBJECT_BASE_NAME=sandboxapp-ddns
-export DOMAIN_NAME=sandboxapp.ddns.net
-. $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
+# # Setup the Istio Gateway tying https to sandboxapp.ddns.net via a lets encrypt cert.
+# export OBJECT_BASE_NAME=sandboxapp-ddns
+# export DOMAIN_NAME=sandboxapp.ddns.net
+# . $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
 
-# Install the helloworld service into cluster
-kubectl apply -n production -f https://raw.githubusercontent.com/istio/istio/1.1.7/samples/helloworld/helloworld.yaml
+# # Install the helloworld service into cluster
+# kubectl apply -n production -f https://raw.githubusercontent.com/istio/istio/1.1.7/samples/helloworld/helloworld.yaml
 
-# Tie hello world service to https gateway.
-export HOST_NAMESPACE=production
-export HOST_NAME=helloworld
-export HOST_PORT=5000
-. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
+# # Tie hello world service to https gateway.
+# export HOST_NAMESPACE=production
+# export HOST_NAME=helloworld
+# export HOST_PORT=5000
+# . $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
-# Redirect http traffic to https.
-export HOST_NAMESPACE=redirector
-export HOST_NAME=redirect
-export HOST_PORT=80
-. $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
+# # Redirect http traffic to https.
+# export HOST_NAMESPACE=redirector
+# export HOST_NAME=redirect
+# export HOST_PORT=80
+# . $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
+
+
+
+
+
 
 # # Create a network tester for testing the internal network of the cluster.
 # kubectl create -f $COMMON_FILES_PATH/Deployment/busyBoxTester.yaml
 
 # Setup the Istio Gateway tying https to sandboxregistry.ddns.net via a lets encrypt cert.
-export OBJECT_BASE_NAME=sandboxregistry-ddns
-export DOMAIN_NAME=sandboxregistry.ddns.net
-. $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
+# export OBJECT_BASE_NAME=sandboxregistry-ddns
+# export DOMAIN_NAME=sandboxregistry.ddns.net
+# . $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
 
-# Clone and install harbor into the cluster.
-git clone https://github.com/goharbor/harbor-helm harbor-helm
+# # Clone and install harbor into the cluster.
+# git clone https://github.com/goharbor/harbor-helm harbor-helm
 
-cd ./harbor-helm
+# cd ./harbor-helm
 
-# Commits from 11-21-2018 broke persistence, need to investigate values.yaml changes in future.
-git checkout -b 1.0.0 origin/1.0.0
+# # Commits from 11-21-2018 broke persistence, need to investigate values.yaml changes in future.
+# git checkout -b 1.0.0 origin/1.0.0
 
-helm dependency update
-helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deployment/harbor-helm-values.yaml --set harborAdminPassword=$HARBOR_ADMIN_USER_PASSWORD --set secretKey=$HARBOR_SECRET_KEY --set database.internal.password=$HARBOR_ADMIN_USER_PASSWORD .
-# # kubectl exec -it harbor-harbor-database-0 -n build usr/bin/bash
-# #   psql -U postgres
-# #   \l
-# #   \dl
-# Setup the gateways tying the last cert to helloworld service
+# helm dependency update
+# helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deployment/harbor-helm-values.yaml --set harborAdminPassword=$HARBOR_ADMIN_USER_PASSWORD --set secretKey=$HARBOR_SECRET_KEY --set database.internal.password=$HARBOR_ADMIN_USER_PASSWORD .
+# # # kubectl exec -it harbor-harbor-database-0 -n build usr/bin/bash
+# # #   psql -U postgres
+# # #   \l
+# # #   \dl
+# # Setup the gateways tying the last cert to helloworld service
 
-# Tie harbor service to https gateway.
-export HOST_NAMESPACE=build
-export HOST_NAME=harbor
-export HOST_PORT=80
-. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
+# # Tie harbor service to https gateway.
+# export HOST_NAMESPACE=build
+# export HOST_NAME=harbor
+# export HOST_PORT=80
+# . $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
 # Tie harbor service to http standard k8s gateway.
 # . $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh

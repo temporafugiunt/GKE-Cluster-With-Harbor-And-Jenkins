@@ -8,3 +8,4 @@ out.plan
 notes.txt
 stable-jenkins
 jenkins-*.tgz
+upstream-helm
