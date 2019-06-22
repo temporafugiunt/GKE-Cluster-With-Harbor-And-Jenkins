@@ -5,7 +5,7 @@
 # gcloud init
 
 export CLUSTER_NAME='devops-sandbox-k8s'
-export CLUSTER_ZONE='us-central1-c'
+export CLUSTER_ZONE='us-east1-b'
 
 # find the zone you want to use
 # gcloud compute zones list | grep us-central1
@@ -19,3 +19,4 @@ gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE
 # TODO - Setup PostgreSQL services
 
 # TODO - Execute main kuberenetes setup found in ../kubernetes/devops-sandbox-cluster
+cd ../../kubernetes/devops-sandbox-cluster/

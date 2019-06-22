@@ -8,13 +8,13 @@ expose:
     # is disabled, the port must be included in the command when pull/push
     # images. Refer to https://github.com/goharbor/harbor/issues/5291 
     # for the detail.
-    enabled: true
+    enabled: false
     # Fill the name of secret if you want to use your own TLS certificate
     # and private key. The secret must contain keys named tls.crt and 
     # tls.key that contain the certificate and private key to use for TLS
     # The certificate and private key will be generated automatically if 
     # it is not set
-    secretName:  &tls_secretName "sandboxregistry-ddns-tls"
+    secretName:  &tls_secretName "registry-dyndns-tls"
     # By default, the Notary service will use the same cert and key as
     # described above. Fill the name of secret if you want to use a 
     # separated one. Only needed when the type is "ingress".
@@ -24,8 +24,8 @@ expose:
     commonName: ""
   ingress:
     hosts:
-      core: sandboxregistry.ddns.net
-      notary: sandboxregistry.ddns.net
+      core: registry.sytes.net
+      notary: registry.sytes.net
     annotations:
       kubernetes.io/ingress.class: "nginx"
       ingress.kubernetes.io/ssl-redirect: "true"
@@ -79,7 +79,7 @@ expose:
 # the IP address of k8s node 
 # 
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
-externalURL: https://sandboxregistry.ddns.net
+externalURL: https://registry.sytes.net
 
 # The persistence is enabled by default and a default StorageClass
 # is needed in the k8s cluster to provision volumes dynamicly. 

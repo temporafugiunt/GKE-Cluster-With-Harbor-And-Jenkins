@@ -10,10 +10,10 @@ Under *cloud-ops/gcp/devops-sandbox-cluster* you will find everything necessary 
 
 Under *cloud-ops/kubernetes/devops-sandbox-cluster* you will find everything necessary for building out the following inside of that kubernetes cluster within GKE:
 
-* A publicly accessible but secured Harbor instance that houses docker images and helm charts for this devops sandbox. That instance is accessible at https://sandboxregistry.ddns.net.
-* A publicly accessible but secured Jenkins instance that builds the application found in this sandbox repository. That instance is accessible at https://sandboxbuilds.ddns.net.
+* A publicly accessible but secured Harbor instance that houses docker images and helm charts for this devops sandbox. That instance is accessible at https://registry.sytes.net.
+* A publicly accessible but secured Jenkins instance that builds the application found in this sandbox repository. That instance is accessible at https://builds.sytes.net.
 
-This kubernetes cluster also tests and is the release environment for the test application contained in *src* and whose helm chart is located under *deploy*, it is accessible at https://sandboxapp.ddns.net. The application under *src* in this repository was originally based off of the React / .NET Core Okta test application found at:
+This kubernetes cluster also tests and is the release environment for the test application contained in *src* and whose helm chart is located under *deploy*, it is accessible at https://apps.sytes.net. The application under *src* in this repository was originally based off of the React / .NET Core Okta test application found at:
 
 https://github.com/oktadeveloper/okta-dotnetcore-react-example
 
@@ -102,9 +102,9 @@ cd cloud-ops/kubernetes/devops-sandbox-cluster
 
     * Any domains that you want to be serviced by your cluster you will have to point to the IP address of your kubernetes load balancer. We did this for our example domains:
 
-        * https://sandboxregistry.ddns.net
-        * https://sandboxbuilds.ddns.net
-        * https://sandboxapp.ddns.net
+        * https://boxregistry.sytes.net
+        * https://builds.sytes.net
+        * https://apps.sytes.net
 
     NOTE: This should be done before running the next bash script as so that cert-manager and the Let's Encrypt service can attempt to create certificates for all the defined services in the cluster. That way when Gateways are defined in the next script the certificate secrets already exist.
 
