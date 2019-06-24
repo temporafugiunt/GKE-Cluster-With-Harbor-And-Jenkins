@@ -70,26 +70,26 @@ export HOST_PORT=5000
 # # Create a network tester for testing the internal network of the cluster.
 # kubectl create -f $COMMON_FILES_PATH/Deployment/busyBoxTester.yaml
 
-cd $CLUSTER_FILES_PATH
+# cd $CLUSTER_FILES_PATH
 
-# Setup the Istio Gateway tying https to sandboxregistry.ddns.net via a lets encrypt cert.
-export OBJECT_BASE_NAME=registry-dyndns
-export DOMAIN_NAME=registry.sytes.net
-. $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
+# # Setup the Istio Gateway tying https to sandboxregistry.ddns.net via a lets encrypt cert.
+# export OBJECT_BASE_NAME=registry-dyndns
+# export DOMAIN_NAME=registry.sytes.net
+# . $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
 
-# Clone and install harbor into the cluster.
-git clone https://github.com/goharbor/harbor-helm harbor-helm
+# # Clone and install harbor into the cluster.
+# git clone https://github.com/goharbor/harbor-helm harbor-helm
 
-cd ./harbor-helm
+# cd ./harbor-helm
 
-# Commits from 11-21-2018 broke persistence, need to investigate values.yaml changes in future.
-git checkout -b 1.0.0 origin/1.0.0
+# # Commits from 11-21-2018 broke persistence, need to investigate values.yaml changes in future.
+# git checkout -b 1.0.0 origin/1.0.0
 
-helm dependency update
-helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deployment/harbor-helm-values.yaml \
-    --set harborAdminPassword=$HARBOR_ADMIN_USER_PASSWORD \
-    --set secretKey=$HARBOR_SECRET_KEY \
-    --set database.internal.password=$HARBOR_ADMIN_USER_PASSWORD .
+# helm dependency update
+# helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deployment/harbor-helm-values.yaml \
+#     --set harborAdminPassword=$HARBOR_ADMIN_USER_PASSWORD \
+#     --set secretKey=$HARBOR_SECRET_KEY \
+#     --set database.internal.password=$HARBOR_ADMIN_USER_PASSWORD .
 # # kubectl exec -it harbor-harbor-database-0 -n build usr/bin/bash
 # #   psql -U postgres
 # #   \l
@@ -97,10 +97,10 @@ helm upgrade --install --namespace build harbor -f $CLUSTER_FILES_PATH/Deploymen
 # Setup the gateways tying the last cert to helloworld service
 
 # Tie harbor service to https gateway.
-export HOST_NAMESPACE=build
-export HOST_NAME=harbor
-export HOST_PORT=80
-. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
+# export HOST_NAMESPACE=build
+# export HOST_NAME=harbor
+# export HOST_PORT=80
+# . $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
 # Tie harbor service to http standard k8s gateway.
 #. $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
