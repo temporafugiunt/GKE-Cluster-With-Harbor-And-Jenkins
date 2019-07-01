@@ -10,8 +10,8 @@ export CLUSTER_ZONE='us-east1-b'
 # find the zone you want to use
 # gcloud compute zones list | grep us-central1
 
-# Creat the new cluster
-gcloud container clusters create $CLUSTER_NAME --num-nodes 3  --zone $CLUSTER_ZONE --machine-type=n1-standard-2 --enable-ip-alias --enable-autorepair --enable-autoupgrade
+# Creat the new cluster (Use a version of GKE that uses docker 18.X for multistage build support).
+gcloud container clusters create $CLUSTER_NAME --cluster-version=1.13.6-gke.13 --num-nodes 3  --zone $CLUSTER_ZONE --machine-type=n1-standard-2 --enable-ip-alias --enable-autorepair --enable-autoupgrade
 
 # Get the proper credentials with which to work with kubectl
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE

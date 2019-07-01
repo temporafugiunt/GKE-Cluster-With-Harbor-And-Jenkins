@@ -96,6 +96,16 @@ kubectl create secret generic smtp-env-secrets -n production \
 
 # Setup standard db secrets for use by multiple apps.
 kubectl create secret generic sts-env-secrets -n production \
-    --from-literal=OKTA_CLIENT_CONNECTIONTIMEOUT=$OKTA_CLIENT_CONNECTIONTIMEOUT \
-    --from-literal=OKTA_CLIENT_OKTADOMAIN=$OKTA_CLIENT_OKTADOMAIN \
-    --from-literal=OKTA_CLIENT_TOKEN=$OKTA_CLIENT_TOKEN
+    --from-literal=AUTH0_DOMAIN=$AUTH0_DOMAIN \
+    --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID \
+    --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET
+    
+# Create the secret that apps can use to tell what environments they are.
+kubectl create secret generic standard-env-secrets -n build \
+    --from-literal=ENVIRONMENT_NAME=build
+
+kubectl create secret generic standard-env-secrets -n production \
+    --from-literal=ENVIRONMENT_NAME=production
+
+kubectl create secret generic standard-env-secrets -n beta \
+    --from-literal=ENVIRONMENT_NAME=beta

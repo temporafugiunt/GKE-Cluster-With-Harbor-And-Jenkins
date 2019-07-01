@@ -13,7 +13,7 @@ export CERT_ISSUER=letsencrypt-production-issuer
 # Install Jenkins instance and all the Istio specific objects not supported by Helm chart to expose Jenkins properly
 # to the outside world not using Ingress.
 export OBJECT_BASE_NAME=builds-dyndns
-export DOMAIN_NAME=builds.sytes.net
+export DOMAIN_NAME=builds.ddns.net
 . $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
 
 cd $CLUSTER_FILES_PATH
@@ -48,18 +48,24 @@ export HOST_PORT=8080
 # . $COMMON_BASH_FILES_PATH/tie-host-to-k8s-ingress-gateway-via-vservice.sh
 
 # # Setup the Istio Gateway tying https to sandboxapp.ddns.net via a lets encrypt cert.
-export OBJECT_BASE_NAME=apps-dyndns
-export DOMAIN_NAME=apps.sytes.net
+export OBJECT_BASE_NAME=sandboxapps-dyndns
+export DOMAIN_NAME=sandboxapps.ddns.net
 . $COMMON_BASH_FILES_PATH/setup-cert-and-named-gateway-for-dns-name.sh
 
-# Install the helloworld service into cluster
-kubectl apply -n production -f https://raw.githubusercontent.com/istio/istio/1.1.7/samples/helloworld/helloworld.yaml
+kubectl create secret generic sandboxapps-env-secrets -n beta \
+    --from-literal=SANDBOXAPPS_DNS_NAME=$DOMAIN_NAME
 
-# Tie hello world service to https gateway.
-export HOST_NAMESPACE=production
-export HOST_NAME=helloworld
-export HOST_PORT=5000
-. $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
+kubectl create secret generic sandboxapps-env-secrets -n production \
+    --from-literal=SANDBOXAPPS_DNS_NAME=$DOMAIN_NAME
+
+# # Install the helloworld service into cluster
+# kubectl apply -n production -f https://raw.githubusercontent.com/istio/istio/1.1.7/samples/helloworld/helloworld.yaml
+
+# # Tie hello world service to https gateway.
+# export HOST_NAMESPACE=production
+# export HOST_NAME=helloworld
+# export HOST_PORT=5000
+# . $COMMON_BASH_FILES_PATH/tie-host-to-named-gateway-via-vservice.sh
 
 # Redirect http traffic to https.
 # export HOST_NAMESPACE=redirector
