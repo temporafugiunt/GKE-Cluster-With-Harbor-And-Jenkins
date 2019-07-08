@@ -22,11 +22,11 @@ export NAMESPACE_NAME=build
 . $COMMON_BASH_FILES_PATH/create-namespace.sh
 
 # Create the production namespace for production versions of apps built in cluster.
-export NAMESPACE_NAME=production
+export NAMESPACE_NAME=dev
 . $COMMON_BASH_FILES_PATH/create-namespace.sh
 
 # Create the beta namespace namespace for beta versions of apps built in cluster.
-export NAMESPACE_NAME=beta
+export NAMESPACE_NAME=qa
 . $COMMON_BASH_FILES_PATH/create-namespace.sh
 
 # Create cluster role binding for admin access to the current user.
@@ -95,7 +95,12 @@ kubectl create secret generic smtp-env-secrets -n production \
 #     --from-literal=DB__USERPASSWORD=$AZURE_SQL_SERVER_ADMIN_PASSWORD
 
 # Setup standard db secrets for use by multiple apps.
-kubectl create secret generic sts-env-secrets -n production \
+kubectl create secret generic sts-env-secrets -n dev \
+    --from-literal=AUTH0_DOMAIN=$AUTH0_DOMAIN \
+    --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID \
+    --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET
+
+kubectl create secret generic sts-env-secrets -n qa \
     --from-literal=AUTH0_DOMAIN=$AUTH0_DOMAIN \
     --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID \
     --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET
@@ -104,8 +109,8 @@ kubectl create secret generic sts-env-secrets -n production \
 kubectl create secret generic standard-env-secrets -n build \
     --from-literal=ENVIRONMENT_NAME=build
 
-kubectl create secret generic standard-env-secrets -n production \
-    --from-literal=ENVIRONMENT_NAME=production
+kubectl create secret generic standard-env-secrets -n dev \
+    --from-literal=ENVIRONMENT_NAME=dev
 
-kubectl create secret generic standard-env-secrets -n beta \
-    --from-literal=ENVIRONMENT_NAME=beta
+kubectl create secret generic standard-env-secrets -n qa \
+    --from-literal=ENVIRONMENT_NAME=qa
