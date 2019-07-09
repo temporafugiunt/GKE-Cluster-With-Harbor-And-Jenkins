@@ -22,3 +22,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+
+# Always ignore .secrets and .terraform directories and certain files no matter where they are.
+.secrets
+.terraform
+out.plan
+notes.txt
