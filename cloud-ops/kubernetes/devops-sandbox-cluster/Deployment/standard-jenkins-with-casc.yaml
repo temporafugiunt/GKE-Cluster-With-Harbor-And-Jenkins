@@ -546,42 +546,43 @@ master:
         <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.71">
           <script>@Library(&apos;freebyTech&apos;)_
 
-      import com.freebyTech.BuildInfo
+          import com.freebyTech.BuildInfo
 
-      String repository = &apos;k8s-tests&apos;
-      String imageName = &apos;mui-test-app1&apos;
-      BuildInfo buildInfo
+          String repository = &apos;k8s-tests&apos;
+          String imageName = &apos;mui-test-app1&apos;
+          BuildInfo buildInfo
 
-      pipeline
-      {
-          agent any
-
-          parameters
+          pipeline
           {
-              string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
-              choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;dev&quot;, &quot;qa&quot;], name: &quot;namespace&quot;)
-          }
+              agent any
 
-          stages
-          {
-              stage (&quot;deploy&quot;)
+              parameters
               {
-                  steps
+                  string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
+                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;dev&quot;, &quot;qa&quot;], name: &quot;namespace&quot;)
+              }
+
+              stages
+              {
+                  stage (&quot;deploy&quot;)
                   {
-                      script
+                      steps
                       {
-                          echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
-                          deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                          script
+                          {
+                              echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                          }
                       }
                   }
               }
-          }
-      }</script>
-        <sandbox>false</sandbox>
-      </definition>
-      <triggers/>
-      <disabled>false</disabled>
-      RELEASE-MUI-Test-Application2: |-
+          }</script>
+          <sandbox>false</sandbox>
+        </definition>
+        <triggers/>
+        <disabled>false</disabled>
+      </flow-definition>
+    RELEASE-MUI-Test-Application2: |-
       <?xml version='1.1' encoding='UTF-8'?>
       <flow-definition plugin="workflow-job@2.32">
         <actions>
@@ -622,41 +623,42 @@ master:
         <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.71">
           <script>@Library(&apos;freebyTech&apos;)_
 
-      import com.freebyTech.BuildInfo
+          import com.freebyTech.BuildInfo
 
-      String repository = &apos;k8s-tests&apos;
-      String imageName = &apos;mui-test-app2&apos;
-      BuildInfo buildInfo
+          String repository = &apos;k8s-tests&apos;
+          String imageName = &apos;mui-test-app2&apos;
+          BuildInfo buildInfo
 
-      pipeline
-      {
-          agent any
-
-          parameters
+          pipeline
           {
-              string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
-              choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;dev&quot;, &quot;qa&quot;], name: &quot;namespace&quot;)
-          }
+              agent any
 
-          stages
-          {
-              stage (&quot;deploy&quot;)
+              parameters
               {
-                  steps
+                  string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
+                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;dev&quot;, &quot;qa&quot;], name: &quot;namespace&quot;)
+              }
+
+              stages
+              {
+                  stage (&quot;deploy&quot;)
                   {
-                      script
+                      steps
                       {
-                          echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
-                          deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                          script
+                          {
+                              echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                          }
                       }
                   }
               }
-          }
-      }</script>
-        <sandbox>false</sandbox>
-      </definition>
-      <triggers/>
-      <disabled>false</disabled>
+          }</script>
+          <sandbox>false</sandbox>
+        </definition>
+        <triggers/>
+        <disabled>false</disabled>
+      </flow-definition>
   # Below is the implementation of Jenkins Configuration as Code.  Add a key under configScripts for each configuration area,
   # where each corresponds to a plugin or section of the UI.  Each key (prior to | character) is just a label, and can be any value.
   # Keys are only used to give the section a meaningful name.  The only restriction is they may only contain RFC 1123 \ DNS label

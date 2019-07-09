@@ -52,12 +52,14 @@ then
     # Create the private docker registry connection secret.
     kubectl create secret docker-registry registry-regcred --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
     kubectl create secret docker-registry registry-regcred -n build --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
-    kubectl create secret docker-registry registry-regcred -n production --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n dev --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n qa --docker-server=https://index.docker.io/v1/ --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
 else
     # Create the private docker registry connection secret.
     kubectl create secret docker-registry registry-regcred --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
     kubectl create secret docker-registry registry-regcred -n build --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
-    kubectl create secret docker-registry registry-regcred -n production --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n dev --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
+    kubectl create secret docker-registry registry-regcred -n qa --docker-server=https://${REGISTRY_URL} --docker-username=$REGISTRY_USER --docker-password=$REGISTRY_USER_PASSWORD --docker-email=$REGISTRY_EMAIL
 fi
 
 # Give jenkins service account right to pull images from private repository.
@@ -81,7 +83,7 @@ kubectl create secret generic jenkins-env-secrets -n build \
     --from-literal=addenv_AGENT_IMAGE=jenkins-agent:latest
 
 # Setup standard mail secrets for use by multiple apps.
-kubectl create secret generic smtp-env-secrets -n production \
+kubectl create secret generic smtp-env-secrets -n dev \
     --from-literal=MAIL__SMTPSERVER=$MAIL__SMTPSERVER \
     --from-literal=MAIL__SMTPPORT=$MAIL__SMTPPORT \
     --from-literal=MAIL__SMTPUSERNAME=$MAIL__SMTPUSERNAME \
