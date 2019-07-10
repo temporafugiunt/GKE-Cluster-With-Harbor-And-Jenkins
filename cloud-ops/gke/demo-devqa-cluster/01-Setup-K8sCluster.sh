@@ -4,7 +4,7 @@
 # Run if you need to init init the SDK and set the current user and the current project. This can be commented out if not needed.
 # gcloud init
 
-export CLUSTER_NAME='devops-sandbox-k8s'
+export CLUSTER_NAME='gcs-demo-devqa'
 export CLUSTER_ZONE='us-east1-b'
 
 # find the zone you want to use
