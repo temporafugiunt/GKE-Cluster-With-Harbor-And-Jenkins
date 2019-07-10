@@ -15,9 +15,8 @@ export COMMON_BASH_FILES_PATH=$COMMON_FILES_PATH/bash-files
 # Make sure we are where we need to be to setup the kubeconfig properly
 cd $CLUSTER_FILES_PATH
 
-# # Set necessary secrets as environment variables.
-# #. ../../azure/devops-sandbox-cluster/.secrets/set-sql-server-environment-variables.sh
-. $COMMON_FILES_PATH/.secrets/set-external-resources-environment-variables.sh
+# Connect to proper cluster in this command window.
+. $CLUSTER_FILES_PATH/../../azure/demo-production-cluster/init-kube-connection.sh
 
 echo 'proxy opened at:'
 echo 'http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/overview?namespace=default'
