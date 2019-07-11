@@ -13,4 +13,4 @@ Import-Module "$commonPsModulesPath\New-ClusterByTerraform.psm1"
 
 $clusterName = 'gcs-demo-prod'
 
-$newClusterInfo = New-ClusterByTerraform -ClusterName $clusterName -ClusterPath $commandPath -AgentCount 2 -VmSize 'Standard_B2s' -ClusterLocation 'Central US' -DiskSize 64
+$newClusterInfo = New-ClusterByTerraform -ClusterName $clusterName -ClusterPath $commandPath -AgentCount 3 -VmSize 'Standard_B2ms' -ClusterLocation 'Central US' -DiskSize 64

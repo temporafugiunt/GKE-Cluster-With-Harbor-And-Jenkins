@@ -104,13 +104,13 @@ kubectl create secret generic smtp-env-secrets -n production \
 # Setup standard db secrets for use by multiple apps.
 kubectl create secret generic sts-env-secrets -n production \
     --from-literal=AUTH0_DOMAIN=$AUTH0_DOMAIN \
-    --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID \
-    --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET
+    --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID_PROD \
+    --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET_PROD
 
 kubectl create secret generic sts-env-secrets -n beta \
     --from-literal=AUTH0_DOMAIN=$AUTH0_DOMAIN \
-    --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID \
-    --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET
+    --from-literal=AUTH0_CLIENTID=$AUTH0_CLIENTID_PROD \
+    --from-literal=AUTH0_CLIENTSECRET=$AUTH0_CLIENTSECRET_PROD
     
 # Create the secret that apps can use to tell what environments they are.
 kubectl create secret generic standard-env-secrets -n build \

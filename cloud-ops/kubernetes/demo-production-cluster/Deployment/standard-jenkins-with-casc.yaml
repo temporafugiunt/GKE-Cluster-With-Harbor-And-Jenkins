@@ -350,34 +350,13 @@ master:
           <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.3.9">
             <jobProperties/>
             <triggers/>
-            <parameters>
-              <string>imageVersion</string>
-              <string>namespace</string>
-            </parameters>
+            <parameters />
             <options/>
           </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
         </actions>
         <description></description>
         <keepDependencies>false</keepDependencies>
         <properties>
-          <hudson.model.ParametersDefinitionProperty>
-            <parameterDefinitions>
-              <hudson.model.StringParameterDefinition>
-                <name>imageVersion</name>
-                <description>Version of mui-test-app2 to deploy</description>
-                <defaultValue>1.0.X.X</defaultValue>
-                <trim>false</trim>
-              </hudson.model.StringParameterDefinition>
-              <hudson.model.ChoiceParameterDefinition>
-                <name>namespace</name>
-                <description>Namespace to deploy mui-test-app2 to</description>
-                <choices>
-                  <string>production</string>
-                  <string>beta</string>
-                </choices>
-              </hudson.model.ChoiceParameterDefinition>
-            </parameterDefinitions>
-          </hudson.model.ParametersDefinitionProperty>
           <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.8"/>
         </properties>
         <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.71">
@@ -396,7 +375,7 @@ master:
               parameters
               {
                   string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
-                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;production&quot;, &quot;beta&quot;], name: &quot;namespace&quot;)
+                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;Both&quot;, &quot;production&quot;, &quot;beta&quot;], name: &quot;namespace&quot;)
               }
 
               stages
@@ -407,8 +386,18 @@ master:
                       {
                           script
                           {
+                            if(&quot;Both&quot;.equalsIgnoreCase(params.namespace))
+                            {
+                              echo &quot;Deploying ${params.imageVersion} to production&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, &quot;production&quot;)
+                              echo &quot;Deploying ${params.imageVersion} to beta&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, &quot;beta&quot;)
+                            }
+                            else
+                            {
                               echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
                               deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                            }
                           }
                       }
                   }
@@ -427,34 +416,13 @@ master:
           <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.3.9">
             <jobProperties/>
             <triggers/>
-            <parameters>
-              <string>imageVersion</string>
-              <string>namespace</string>
-            </parameters>
+            <parameters/>
             <options/>
           </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
         </actions>
         <description></description>
         <keepDependencies>false</keepDependencies>
         <properties>
-          <hudson.model.ParametersDefinitionProperty>
-            <parameterDefinitions>
-              <hudson.model.StringParameterDefinition>
-                <name>imageVersion</name>
-                <description>Version of mui-test-app2 to deploy</description>
-                <defaultValue>1.0.X.X</defaultValue>
-                <trim>false</trim>
-              </hudson.model.StringParameterDefinition>
-              <hudson.model.ChoiceParameterDefinition>
-                <name>namespace</name>
-                <description>Namespace to deploy mui-test-app2 to</description>
-                <choices>
-                  <string>production</string>
-                  <string>beta</string>
-                </choices>
-              </hudson.model.ChoiceParameterDefinition>
-            </parameterDefinitions>
-          </hudson.model.ParametersDefinitionProperty>
           <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.8"/>
         </properties>
         <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.71">
@@ -473,7 +441,7 @@ master:
               parameters
               {
                   string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
-                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;production&quot;, &quot;beta&quot;], name: &quot;namespace&quot;)
+                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;Both&quot;, &quot;production&quot;, &quot;beta&quot;], name: &quot;namespace&quot;)
               }
 
               stages
@@ -484,8 +452,18 @@ master:
                       {
                           script
                           {
+                            if(&quot;Both&quot;.equalsIgnoreCase(params.namespace))
+                            {
+                              echo &quot;Deploying ${params.imageVersion} to production&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, &quot;production&quot;)
+                              echo &quot;Deploying ${params.imageVersion} to beta&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, &quot;beta&quot;)
+                            }
+                            else
+                            {
                               echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
                               deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                            }
                           }
                       }
                   }
@@ -504,34 +482,13 @@ master:
           <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.3.9">
             <jobProperties/>
             <triggers/>
-            <parameters>
-              <string>imageVersion</string>
-              <string>namespace</string>
-            </parameters>
+            <parameters />
             <options/>
           </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
         </actions>
         <description></description>
         <keepDependencies>false</keepDependencies>
         <properties>
-          <hudson.model.ParametersDefinitionProperty>
-            <parameterDefinitions>
-              <hudson.model.StringParameterDefinition>
-                <name>imageVersion</name>
-                <description>Version of auth-microservice-auth0 to deploy</description>
-                <defaultValue>1.0.X.X</defaultValue>
-                <trim>false</trim>
-              </hudson.model.StringParameterDefinition>
-              <hudson.model.ChoiceParameterDefinition>
-                <name>namespace</name>
-                <description>Namespace to deploy auth-microservice-auth0 to</description>
-                <choices>
-                  <string>production</string>
-                  <string>beta</string>
-                </choices>
-              </hudson.model.ChoiceParameterDefinition>
-            </parameterDefinitions>
-          </hudson.model.ParametersDefinitionProperty>
           <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.8"/>
         </properties>
         <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.71">
@@ -550,7 +507,7 @@ master:
               parameters
               {
                   string(description: &quot;Version of ${imageName} to deploy&quot;, defaultValue: &quot;1.0.X.X&quot;, name: &quot;imageVersion&quot;)
-                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;production&quot;, &quot;beta&quot;], name: &quot;namespace&quot;)
+                  choice(description: &quot;Namespace to deploy ${imageName} to&quot;, choices: [&quot;Both&quot;, &quot;production&quot;, &quot;beta&quot;], name: &quot;namespace&quot;)
               }
 
               stages
@@ -561,8 +518,18 @@ master:
                       {
                           script
                           {
+                            if(&quot;Both&quot;.equalsIgnoreCase(params.namespace))
+                            {
+                              echo &quot;Deploying ${params.imageVersion} to production&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, &quot;production&quot;)
+                              echo &quot;Deploying ${params.imageVersion} to beta&quot;
+                              deployVersion(this, params.imageVersion, repository, imageName, &quot;beta&quot;)
+                            }
+                            else
+                            {
                               echo &quot;Deploying ${params.imageVersion} to ${params.namespace}&quot;
                               deployVersion(this, params.imageVersion, repository, imageName, params.namespace)
+                            }
                           }
                       }
                   }
@@ -590,6 +557,10 @@ master:
       welcome-message: |
         jenkins:
           systemMessage: Welcome to the Google Cloud Summit CI\CD server.  This Jenkins is configured and managed completely 'as code' and all Jobs for this demo area already loaded.      
+      security: |
+        security:
+          globalJobDslSecurityConfiguration:
+             useScriptSecurity: false
       global-libraries: |
         unclassified:
           globalLibraries:

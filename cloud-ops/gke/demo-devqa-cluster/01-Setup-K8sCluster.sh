@@ -19,4 +19,4 @@ gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE
 # TODO - Setup PostgreSQL services
 
 # TODO - Execute main kuberenetes setup found in ../kubernetes/devops-sandbox-cluster
-cd ../../kubernetes/devops-sandbox-cluster/
+cd ../../kubernetes/demo-devqa-cluster/
