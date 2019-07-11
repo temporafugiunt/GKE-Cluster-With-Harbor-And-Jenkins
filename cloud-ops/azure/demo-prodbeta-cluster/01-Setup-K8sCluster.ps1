@@ -11,6 +11,8 @@ $commonPsModulesPath = Resolve-Path -Path "$commandPath\CloudLibs\ps-functions\a
 
 Import-Module "$commonPsModulesPath\New-ClusterByTerraform.psm1"
 
-$clusterName = 'gcs-demo-prod'
+$clusterName = 'demo-prodbeta-cluster'
+$clusterLocation = 'Central US'
+$nodeCount = 3
 
-$newClusterInfo = New-ClusterByTerraform -ClusterName $clusterName -ClusterPath $commandPath -AgentCount 3 -VmSize 'Standard_B2ms' -ClusterLocation 'Central US' -DiskSize 64
+$newClusterInfo = New-ClusterByTerraform -ClusterName $clusterName -ClusterPath $commandPath -AgentCount $nodeCount -VmSize 'Standard_B2ms' -ClusterLocation $clusterLocation -DiskSize 64

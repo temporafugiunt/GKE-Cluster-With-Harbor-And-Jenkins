@@ -1,23 +1,57 @@
 # Cloud Environment and DevOps Pipeline Setup
 
-This repository demonstrates the necessary steps to setup a GKE Cluster inside of GCP infrastructure for a DevOps sandbox and test application with Linux SQL Server Container and an external OAuth 2.0 / OpenID Connect STS. All source code is represented in this repository minus secret definitions defined in environment variables and loaded dynamically into Kuberetes for already exsiting external resources. This is one aspect of a twelve-factor application as originally outlined by the developers at Heroku. More information about twelve-factor applications can be found here at https://12factor.net/.
+This repository demonstrates the necessary steps to setup two clusters using two different cloud providers:
 
-![alt text](https://github.com/temporafugiunt/GKE-Cluster-With-Harbor-And-Jenkins/blob/develop/documentation/02-Project-Architecture.PNG "Project Architecture Diagram")
+1) A GKE Cluster inside of GCP to rerpresent Dev / QA enviornments for a microservice ecosystem. The kubernetes cluster is built using the gcloud command line. Kubectl and helm are then used to install Istio and to populate the pipeline and microservice ecosystem components for the cluster.
+2) A AKS cluster inside of Azure to rerpresent a Production / Beta enviornments for that same microservice ecosystem. The kubernetes cluster is built using a combination of Az PowerShell functions and terraform. Kubectl and helm are then used to install Istio and to populate the pipeline and microservice ecosystem components for the cluster.
 
-Under *cloud-ops/gcp/devops-sandbox-cluster* you will find everything necessary for building out the following infrastructure in GCP:
+# Dev / QA K8s Cluster
 
-* A 4 node linux cluster of the size n1-standard-2 that is the DevOps cluster of this project. See the next section for general information regarding standard cluster sizes that can be used with these creation scripts, node count can also be changed.
+The Dev / QA cluster contains a Jenkins Pipeline which builds 3 microservice applications:
 
-Under *cloud-ops/kubernetes/devops-sandbox-cluster* you will find everything necessary for building out the following inside of that kubernetes cluster within GKE:
+| Application Name           | GitHub Repository                                          | Description                                                            |
+|----------------------------|------------------------------------------------------------|------------------------------------------------------------------------|
+| auth-microservive-auth0    | https://github.com/temporafugiunt/auth-microservice-auth0  | A microservice which works with an external Security Token Serivce provider providing OAuth 2.0 / OpenID Connect services for the microservice environments. In this implementation that service provider Auth0. |
+| mui-test-application1      | https://github.com/temporafugiunt/mui-test-application1    | A test application representing a "monolith application" as represented by the */app1* subdomain. |
+| mui-test-application2      | https://github.com/temporafugiunt/mui-test-application2    | A test application representing a "service peeled off the monolith application and rewritten as a microservice" as represented by the */app2* subdomain. |
 
-* A publicly accessible but secured Harbor instance that houses docker images and helm charts for this devops sandbox. That instance is accessible at https://registry.sytes.net.
-* A publicly accessible but secured Jenkins instance that builds the application found in this sandbox repository. That instance is accessible at https://builds.sytes.net.
+The jenkins pipeline also contains the ability to deploy those 3 built applications to both the Dev and QA environments within the cluster. The *builds*, *dev*, and *qa* namespaces represent the *pipeline*, *Dev*, and *QA* environments respectively. 
 
-This kubernetes cluster also tests and is the release environment for the test application contained in *src* and whose helm chart is located under *deploy*, it is accessible at https://apps.sytes.net. The application under *src* in this repository was originally based off of the React / .NET Core Okta test application found at:
+# Production / Beta K8s Cluster
 
-https://github.com/oktadeveloper/okta-dotnetcore-react-example
+The Production / Beta cluster contains a Jenkins Pipeline which can release Docker images of those 3 microservice applications built in the first cluster into the Production and / or Beta environments within the cluster. 
 
-That application's source is governed by the Apache 2.0 license, see its repository for more inforrmation.
+Different versions of those apps can be deployed to either the *dev* or *qa* environments within the cluster. The *builds*, *production*, and *beta* namespaces represent the *pipeline*, *Production*, and *Beta* environments respectively. 
+
+# The Microservice Ecosystem representing the Application
+
+The application ecosystem as defined in this demo is an attempt to represent many components of a twelve-factor application as originally outlined by the developers at Heroku. More information about twelve-factor applications can be found here at https://12factor.net/.
+
+The microservice applications all use an external OAuth 2.0 / OpenID Connect STS for authentication and authorization support. The domain of the user as authenticated by the STS determines whether that user will be routed to Dev or QA in cluster 1 and Production or Beta in cluster 2.
+
+# Folder Structure
+
+## GCP Infrastructure Setup
+
+* Under *cloud-ops/gke/demo-devqa-cluster* are the scripts necessary for building out a 3 node linux cluster of the VM size n1-standard-2 in GCP. VM sizes and prices as of July 2019 can be seen in a subsequent section.
+
+## Azure Infrastructure Setup
+
+* Under *cloud-ops/azure/demo-production-cluster* are the scripts necessary for building out a 3 node linux cluster of the size Standard_B2ms in Azure. VM sizes and prices as of July 2019 can be seen in a subsequent section.
+
+## Setup of Kubernetes Clusters
+
+Under *cloud-ops/kubernetes* you will find everything necessary for building out the following inside of both of the kubernetes clusters using kubectl and helm commands:
+
+* Installation of the helm command line and the Tiller release manager inside the cluster. Helm and Tiller allow for deployment, upgrading, and rollback of named installations of complete release packages within the cluster. Helm is know as "the package manager of kubernetes". More information on helm can be found at https://helm.sh/.
+
+* Installation and configuration of Istio, this acts as the routing layer for the cluster and also interacts with Jetstack Certmanger and Let's Encrypt for automatic HTTPS certificate construction for the external domain names of each cluster. Istio is a complex set of services that provide a great amount of functionality beyond path and header based routing, more information can be found at https://istio.io/.
+
+* Installaction of a publicly accessible but secured Jenkins instance used as the pipeline for building and delivering the application ecosystem within each cluster:
+    * Dev / QA is available at https://dev-pipelines.devsandbox.co.
+    * Production / Beta is available as https://pipelines.devsandbox.co.
+
+
 
 # GCP VM Pricing
 

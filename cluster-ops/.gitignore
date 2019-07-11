@@ -5,3 +5,4 @@ get_helm.sh
 stable-jenkins
 jenkins-*.tgz
 upstream-helm
+CloudLibs
