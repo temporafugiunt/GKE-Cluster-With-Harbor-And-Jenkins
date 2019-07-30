@@ -33,3 +33,5 @@ kfctl init ${KFAPP} --config=${CONFIG} -V
 cd ${KFAPP}
 kfctl generate all -V
 kfctl apply all -V
+
+cd $CLUSTER_FILES_PATH
