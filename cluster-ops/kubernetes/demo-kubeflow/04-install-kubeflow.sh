@@ -35,3 +35,9 @@ kfctl generate all -V
 kfctl apply all -V
 
 cd $CLUSTER_FILES_PATH
+
+export LOAD_BALANCER_EXTERNAL_IP=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+echo "Your external Load Balancer IP Address is $LOAD_BALANCER_EXTERNAL_IP, please update your DNS records if needed."
+
+
