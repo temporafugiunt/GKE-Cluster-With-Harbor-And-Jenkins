@@ -7,4 +7,5 @@ export HELM_INSTALL_DIR=$CLUSTER_FILES_PATH/helm
 export PATH=$PATH:$HELM_INSTALL_DIR
 
 mkdir $HELM_INSTALL_DIR
+chmod a+x $CLUSTER_FILES_PATH/get_helm.sh
 $CLUSTER_FILES_PATH/get_helm.sh
