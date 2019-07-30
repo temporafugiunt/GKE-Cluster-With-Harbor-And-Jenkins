@@ -11,7 +11,7 @@ $commonPsModulesPath = Resolve-Path -Path "$commandPath\CloudLibs\ps-functions\a
 
 Import-Module "$commonPsModulesPath\New-ClusterByTerraform.psm1"
 
-$clusterName = 'demo-prodbeta-cluster'
+$clusterName = 'prodbeta-cluster'
 $clusterLocation = 'Central US'
 $nodeCount = 3
 

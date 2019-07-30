@@ -1,0 +1,102 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  creationTimestamp: 2019-07-12T03:20:51Z
+  generation: 1
+  labels:
+    app.kubernetes.io/instance: dev-auth-microservice-auth0
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: auth-microservice-auth0
+    helm.sh/chart: auth-microservice-auth0-1.0.2
+  name: dev-auth-microservice-auth0
+  namespace: dev
+  resourceVersion: "63732"
+  selfLink: /apis/networking.istio.io/v1alpha3/namespaces/dev/virtualservices/dev-auth-microservice-auth0
+  uid: 0d137acd-a454-11e9-8e6f-42010a8e01fb
+spec:
+  gateways:
+  - istio-system/apps-devsandbox-gateway
+  hosts:
+  - dev-apps.devsandbox.co
+  - apps.devsandbox.co
+  http:
+  - match:
+    - uri:
+        prefix: /home
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /Home
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /callback
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /Account
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /account
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /js
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /lib
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /css
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        prefix: /img
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000
+  - match:
+    - uri:
+        exact: /
+    route:
+    - destination:
+        host: dev-auth-microservice-auth0
+        port:
+          number: 3000

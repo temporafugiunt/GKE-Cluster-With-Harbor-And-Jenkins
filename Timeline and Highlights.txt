@@ -1,0 +1,64 @@
+Timeline for Anthos Concise Demo
+
+0:00-0:03 - Anthos Demo Title Slide
+
+0:03-0:07 - Customer Situation
+	Demo shows a solution to common customer situations:
+		1) A monolithic web application in a single environment that needs to be broken up into smaller microservices that could span environments. 
+		2) A kubernetes cluster or clusters that need to house different versions of an application and route users intelligently for different reasons, such as:
+			* Canary Releases
+			* Blue / Green Testing of new Releases
+			* Early Adopter Beta Access to a Newer Versions
+			
+0:07-0:10 - Steps of the Demostration
+
+0:12-0:15 - Diagram of Clusters showing relevant components of Microservice Applications in the 4 environments and how they interact with Istio and other external services.
+
+0:15-0:24 - Displaying blank clusters in GCP/GKE and Azure.
+
+0:24-0:35 - Opening the internal Kubernetes Dashboard in Azure.
+	GKE has much better native integration with kubernetes than Azure does (even before Anthos). In order to get dashboard insight into AKS clusters one common method is to run the standard Kubernetes Dashboard inside the cluster and connect to it via "kubectl proxy" which is shown here. Running the standard dashboard inside the cluster is completely unnecessary for the GCP side, as GKE shows all the relevant dashboard information and much more.
+	
+0:35-0:48 - Installing namespaces, secrets, and RBAC components into both clusters.
+
+0:48-0:54 - Verifying that "dev/qa/build" namespaces are available in GCP cluster, and "production/beta/build" are available in Azure cluster.
+
+0:54-1:02 - Installing Service Mesh and Pipelines. Installations include:
+	1) Installation of helm and tiller into clusters.
+	2) Helm installation of Istio with cert-manager and default ingress support installed.
+	3) Helm installation of Jenkins pipelines using "Configuration as Code" plugin support to install all components necessary to have Jenkins and all jobs installed and running without any manual setup.
+	4) Helm installation of an nginx redirector service which will redirect all HTTP traffic (besides Let's Encrypt traffic for automatic certificate negotiation) to HTTPS.
+	
+1:02 - 1:14 - Log into dev/qa cluster Jenkins pipeline and verify Let's Encrypt Certificate for:
+	https://dev-pipelines.devsandbox.co
+	
+1:14 - 1:24 - Log into production/beta cluster Jenkins pipeline and verify Let's Encrypt Certificate for:
+	https://pipelines.devsandbox.co
+	
+1:24 - 1:56 - As soon as the dev/qa cluster came online it built the Docker images for the 3 application microservices:
+	1) auth-microservice-auth0
+		A) Overview - Application that provides the authentication and authorization services for applications in cluster. Works with Auth0 as its external OAuth 2.0 / OpenID Connect security token service. This means that no identity information related to usernames and passwords is stored in the cluster and the cluster applications never manage or see a user password. This app is what determines the user email domain and decides places an "environment cookie" for any future request into the URLs of the application.
+		B) Technology - .NET Core 2.2 MVC Web Application.
+	
+	2) mui-test-app1
+		A) Application representing "the monolith". Represents all services under the "app1" subpath. 2nd menu item
+		pressed in application JUMPS the application to the app2 microservice.
+		B) Technology - Node.js application written in React for client application and Express.js for the RESTFul API.
+	
+	3) mui-test-app2
+		A) Application representing a "sprouted microservice" that interacts with the monolith application but is now a stand alone service. Represents all services under the "app2" subpath. Pressing the Logout menu item in this application JUMPS the application back to the auth microservice.
+		B) Technology - Node.js application written in React for client application and Express.js for the RESTFul API.	
+
+1:56 - 2:17 - Watching deployment pods and actual service pods come online to verify application ecosystem of cluster for dev and qa namespaces should now be available.
+
+2:17 - 3:12 - Opening https://dev-apps.devsandbox.co and verifying access to the 3 microservices in the 2 environments, how this works is the following:
+	1) A user logging in with a mavenwave.com email address domain gets redirected by Istio because of the environment cookie to the QA environment.
+	2) A user logging in with any other email address domain gets redirected to Dev environment.
+	
+3:12 - 3:28 - Going to production/beta Jenkins pipelines and deploying the Docker images built by the GCP cluster into the production and beta namespaces.
+
+3:28 - 3:39 - Going to kubernetes dashboard of Azure cluster and verifying that microservice pods come online before attempting to access application ecosystem.
+
+3:391 - 4:04 - Opening https://apps.devsandbox.co and verifying access to the 3 microservices in the 2 environments, how this works is the following:
+	1) A user logging in with a mavenwave.com email address domain gets redirected by Istio because of the environment cookie to the Beta environment.
+	2) A user logging in with any other email address domain gets redirected to Production environment.

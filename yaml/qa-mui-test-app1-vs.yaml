@@ -1,0 +1,44 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  creationTimestamp: 2019-07-12T03:21:54Z
+  generation: 1
+  labels:
+    app.kubernetes.io/instance: qa-mui-test-app1
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: mui-test-app1
+    helm.sh/chart: mui-test-app1-1.0.1
+  name: qa-mui-test-app1
+  namespace: qa
+  resourceVersion: "62670"
+  selfLink: /apis/networking.istio.io/v1alpha3/namespaces/qa/virtualservices/qa-mui-test-app1
+  uid: 32bc8a23-a454-11e9-8e6f-42010a8e01fb
+spec:
+  gateways:
+  - istio-system/apps-devsandbox-gateway
+  hosts:
+  - dev-apps.devsandbox.co
+  - apps.devsandbox.co
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: ^(.*?;)?(environment=qa)(;.*)?$
+      uri:
+        prefix: /app1
+    route:
+    - destination:
+        host: qa-mui-test-app1
+        port:
+          number: 3000
+  - match:
+    - headers:
+        cookie:
+          regex: ^(.*?;)?(environment=qa)(;.*)?$
+      uri:
+        prefix: /App1
+    route:
+    - destination:
+        host: qa-mui-test-app1
+        port:
+          number: 3000

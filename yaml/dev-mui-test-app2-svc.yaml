@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: 2019-07-12T03:21:18Z
+  labels:
+    app.kubernetes.io/instance: dev-mui-test-app2
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: mui-test-app2
+    appNamespace: dev
+    appVersion: 1.0.1.712
+    helm.sh/chart: mui-test-app2-1.0.1
+  name: dev-mui-test-app2
+  namespace: dev
+  resourceVersion: "62486"
+  selfLink: /api/v1/namespaces/dev/services/dev-mui-test-app2
+  uid: 1cf0d164-a454-11e9-8e6f-42010a8e01fb
+spec:
+  clusterIP: 10.0.1.90
+  ports:
+  - name: http
+    port: 3000
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: dev-mui-test-app2
+    app.kubernetes.io/name: mui-test-app2
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

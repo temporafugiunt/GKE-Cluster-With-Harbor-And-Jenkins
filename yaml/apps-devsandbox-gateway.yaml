@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.istio.io/v1alpha3","kind":"Gateway","metadata":{"annotations":{},"labels":{"app":"ingressgateway"},"name":"apps-devsandbox-gateway","namespace":"istio-system"},"spec":{"selector":{"istio":"ingressgateway"},"servers":[{"hosts":["dev-apps.devsandbox.co"],"port":{"name":"https-default","number":443,"protocol":"HTTPS"},"tls":{"credentialName":"apps-devsandbox-tls","mode":"SIMPLE","privateKey":"sds","serverCertificate":"sds"}}]}}
+  creationTimestamp: 2019-07-12T03:05:31Z
+  generation: 1
+  labels:
+    app: ingressgateway
+  name: apps-devsandbox-gateway
+  namespace: istio-system
+  resourceVersion: "58885"
+  selfLink: /apis/networking.istio.io/v1alpha3/namespaces/istio-system/gateways/apps-devsandbox-gateway
+  uid: e8ff3ce8-a451-11e9-8e6f-42010a8e01fb
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - dev-apps.devsandbox.co
+    port:
+      name: https-default
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: apps-devsandbox-tls
+      mode: SIMPLE
+      privateKey: sds
+      serverCertificate: sds

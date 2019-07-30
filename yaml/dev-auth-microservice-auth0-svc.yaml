@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: 2019-07-12T03:20:51Z
+  labels:
+    app.kubernetes.io/instance: dev-auth-microservice-auth0
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: auth-microservice-auth0
+    appNamespace: dev
+    appVersion: 1.0.2.712
+    helm.sh/chart: auth-microservice-auth0-1.0.2
+  name: dev-auth-microservice-auth0
+  namespace: dev
+  resourceVersion: "63728"
+  selfLink: /api/v1/namespaces/dev/services/dev-auth-microservice-auth0
+  uid: 0d07bb20-a454-11e9-8e6f-42010a8e01fb
+spec:
+  clusterIP: 10.0.7.217
+  ports:
+  - name: http
+    port: 3000
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: dev-auth-microservice-auth0
+    app.kubernetes.io/name: auth-microservice-auth0
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
