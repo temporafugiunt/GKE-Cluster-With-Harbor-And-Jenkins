@@ -16,20 +16,20 @@ export COMMON_BASH_FILES_PATH=$COMMON_FILES_PATH/bash-files
 . $COMMON_BASH_FILES_PATH/install-helm-locally.sh
 . $COMMON_BASH_FILES_PATH/install-istio-locally-darwin.sh
 
-# # Initialize tiller in the new cluster (Tiller goes away with V3 of helm),
+# Upgrade tiller in cluster installed by kubespray to the newer version downloaded.
 helm init --service-account tiller --upgrade
 
 # echo 'Sleeping for 30 seconds after installing Tiller'
 # sleep 30s
 
-# Install all the Custom Resource Definitions for Istio.
+# Install all the Custom Resource Definitions for Istio, this seems to be needed sperately but kubeflow installer
 kubectl create namespace istio-system
 helm install $ISTIO_INSTALL_DIR/install/kubernetes/helm/istio-init --name instio-init --namespace istio-system --set certmanager.enabled=true
 # To Verify All CRDs - 53 without cert-manager, 58 with:
 #   kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
 
-# echo 'Sleeping for 60 seconds after installing Istio CRDs'
-# sleep 60s
+echo 'Sleeping for 60 seconds after installing Istio CRDs'
+sleep 60s
 
 # kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.6/deploy/manifests/00-crds.yaml
 
@@ -67,6 +67,7 @@ helm install $ISTIO_INSTALL_DIR/install/kubernetes/helm/istio-init --name instio
 # Install jetstack cert-manager (integrated into istio installation)
 # . $COMMON_BASH_FILES_PATH/helm-install-cert-manager.sh
 
+echo 'Installing MetalLB services for onprem LoadBalancer'
 # Install MetalLB load balancer for on-prem Layer 2 LoadBalancer support.
 # Install ConfigMap
 kubectl create ns metallb-system
