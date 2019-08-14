@@ -36,9 +36,11 @@ helm install seldon-core-operator --name seldon-core --repo https://storage.goog
 # Install the NFS File Provisioner
 export NFS_NAME=auto-provisioned-pvcs
 
-gcloud beta filestore instances create ${NFS_NAME}     --project=${PROJECT}     --location=${ZONE}     --tier=STANDARD     --file-share=name="volumes",capacity=1TB     --network=name="default",reserved-ip-range="10.0.0.0/29"
+gcloud beta filestore instances create ${NFS_NAME}     --project=${PROJECT}     --zone=${ZONE}     --tier=STANDARD     --file-share=name="volumes",capacity=1TB     --network=name="default",reserved-ip-range="10.0.0.0/29"
 
-export FSADDR=$(gcloud beta filestore instances describe ${FS} --project=${PROJECT} --location=${ZONE} --format="value(networks.ipAddresses[0])")
+export FSADDR=$(gcloud beta filestore instances describe ${NFS_NAME} --project=${PROJECT} --zone=${ZONE} --format="value(networks.ipAddresses[0])")
+
+echo "${FSADDR} is the NFS address."
 
 helm install stable/nfs-client-provisioner --name nfs-cp --set nfs.server=${FSADDR} --set nfs.path=/volumes
 # kubectl rollout status  deploy/nfs-cp-nfs-client-provisioner -n kubeflow
