@@ -20,6 +20,8 @@ bindings:
 - members:
   - serviceAccount:fin-times-cluster-vm@mwe-james-eby.iam.gserviceaccount.com
   roles:
+  - roles/bigquery.admin
+  - roles/storage.admin
   - roles/logging.logWriter
   - roles/monitoring.metricWriter
   - roles/monitoring.viewer

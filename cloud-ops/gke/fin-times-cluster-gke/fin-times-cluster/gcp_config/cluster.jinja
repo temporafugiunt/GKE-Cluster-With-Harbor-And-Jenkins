@@ -18,7 +18,8 @@ limitations under the License.
 {% set GPU_POOL = NAME_PREFIX + '-gpu-pool-' + properties['pool-version'] %}
 {% set VM_OAUTH_SCOPES = ['https://www.googleapis.com/auth/logging.write',
                           'https://www.googleapis.com/auth/monitoring',
-                          'https://www.googleapis.com/auth/devstorage.read_only'] %}
+                          'https://www.googleapis.com/auth/devstorage.read_only',
+                          'https://www.googleapis.com/auth/cloud-platform'] %}
 
 {# Names for service accounts.
    -admin is to be used for admin tasks
