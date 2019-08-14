@@ -1,0 +1,496 @@
+apiVersion: kfdef.apps.kubeflow.org/v1alpha1
+kind: KfDef
+metadata:
+  creationTimestamp: null
+  name: fin-times-cluster
+  namespace: kubeflow
+spec:
+  appdir: /Users/mwloaner366/dev/Maven/GKE-Cluster-With-Harbor-And-Jenkins/cloud-ops/gke/fin-times-cluster-gke/fin-times-cluster
+  applications:
+  - kustomizeConfig:
+      parameters:
+      - name: namespace
+        value: istio-system
+      repoRef:
+        name: manifests
+        path: istio/istio-crds
+    name: istio-crds
+  - kustomizeConfig:
+      parameters:
+      - name: namespace
+        value: istio-system
+      repoRef:
+        name: manifests
+        path: istio/istio-install
+    name: istio-install
+  - kustomizeConfig:
+      parameters:
+      - name: clusterRbacConfig
+        value: "ON"
+      repoRef:
+        name: manifests
+        path: istio/istio
+    name: istio
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: application/application-crds
+    name: application-crds
+  - kustomizeConfig:
+      overlays:
+      - application
+      repoRef:
+        name: manifests
+        path: application/application
+    name: application
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: metacontroller
+    name: metacontroller
+  - kustomizeConfig:
+      overlays:
+      - istio
+      repoRef:
+        name: manifests
+        path: argo
+    name: argo
+  - kustomizeConfig:
+      overlays:
+      - istio
+      - application
+      repoRef:
+        name: manifests
+        path: common/centraldashboard
+    name: centraldashboard
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: admission-webhook/webhook
+    name: webhook
+  - kustomizeConfig:
+      parameters:
+      - name: webhookNamePrefix
+        value: admission-webhook-
+      repoRef:
+        name: manifests
+        path: admission-webhook/bootstrap
+    name: bootstrap
+  - kustomizeConfig:
+      overlays:
+      - istio
+      - application
+      repoRef:
+        name: manifests
+        path: jupyter/jupyter-web-app
+    name: jupyter-web-app
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: katib-v1alpha2/katib-db
+    name: katib-db
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: katib-v1alpha2/katib-manager
+    name: katib-manager
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: katib-v1alpha2/katib-controller
+    name: katib-controller
+  - kustomizeConfig:
+      overlays:
+      - istio
+      repoRef:
+        name: manifests
+        path: katib-v1alpha2/katib-ui
+    name: katib-ui
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: katib-v1alpha2/metrics-collector
+    name: metrics-collector
+  - kustomizeConfig:
+      overlays:
+      - istio
+      repoRef:
+        name: manifests
+        path: metadata
+    name: metadata
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: katib-v1alpha2/suggestion
+    name: suggestion
+  - kustomizeConfig:
+      overlays:
+      - istio
+      - application
+      parameters:
+      - name: injectGcpCredentials
+        value: "true"
+      repoRef:
+        name: manifests
+        path: jupyter/notebook-controller
+    name: notebook-controller
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: pytorch-job/pytorch-job-crds
+    name: pytorch-job-crds
+  - kustomizeConfig:
+      overlays:
+      - application
+      repoRef:
+        name: manifests
+        path: pytorch-job/pytorch-operator
+    name: pytorch-operator
+  - kustomizeConfig:
+      parameters:
+      - initRequired: true
+        name: usageId
+        value: "7209273024971741311"
+      - initRequired: true
+        name: reportUsage
+        value: "true"
+      repoRef:
+        name: manifests
+        path: common/spartakus
+    name: spartakus
+  - kustomizeConfig:
+      overlays:
+      - istio
+      repoRef:
+        name: manifests
+        path: tensorboard
+    name: tensorboard
+  - kustomizeConfig:
+      overlays:
+      - istio
+      repoRef:
+        name: manifests
+        path: tf-training/tf-job-operator
+    name: tf-job-operator
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: pipeline/api-service
+    name: api-service
+  - kustomizeConfig:
+      overlays:
+      - minioPd
+      parameters:
+      - name: minioPd
+        value: fin-times-cluster-storage-artifact-store
+      - name: minioPvName
+        value: minio-pv
+      - name: minioPvcName
+        value: minio-pv-claim
+      repoRef:
+        name: manifests
+        path: pipeline/minio
+    name: minio
+  - kustomizeConfig:
+      overlays:
+      - mysqlPd
+      parameters:
+      - name: mysqlPd
+        value: fin-times-cluster-storage-metadata-store
+      - name: mysqlPvName
+        value: mysql-pv
+      - name: mysqlPvcName
+        value: mysql-pv-claim
+      repoRef:
+        name: manifests
+        path: pipeline/mysql
+    name: mysql
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: pipeline/persistent-agent
+    name: persistent-agent
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: pipeline/pipelines-runner
+    name: pipelines-runner
+  - kustomizeConfig:
+      overlays:
+      - istio
+      repoRef:
+        name: manifests
+        path: pipeline/pipelines-ui
+    name: pipelines-ui
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: pipeline/pipelines-viewer
+    name: pipelines-viewer
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: pipeline/scheduledworkflow
+    name: scheduledworkflow
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: cert-manager/cert-manager-crds
+    name: cert-manager-crds
+  - kustomizeConfig:
+      parameters:
+      - initRequired: true
+        name: acmeEmail
+        value: james.eby@mavenwave.com
+      repoRef:
+        name: manifests
+        path: cert-manager/cert-manager
+    name: cert-manager
+  - kustomizeConfig:
+      parameters:
+      - name: secretName
+        value: admin-gcp-sa
+      repoRef:
+        name: manifests
+        path: gcp/cloud-endpoints
+    name: cloud-endpoints
+  - kustomizeConfig:
+      overlays:
+      - istio
+      parameters:
+      - initRequired: true
+        name: admin
+        value: james.eby@mavenwave.com
+      repoRef:
+        name: manifests
+        path: profiles
+    name: profiles
+  - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: gcp/gpu-driver
+    name: gpu-driver
+  - kustomizeConfig:
+      parameters:
+      - name: namespace
+        value: istio-system
+      - initRequired: true
+        name: ipName
+        value: fin-times-cluster-ip
+      - initRequired: true
+        name: hostname
+        value: fin-times-cluster.endpoints.mwe-james-eby.cloud.goog
+      repoRef:
+        name: manifests
+        path: gcp/iap-ingress
+    name: iap-ingress
+  componentParams:
+    application:
+    - name: overlay
+      value: application
+    argo:
+    - name: overlay
+      value: istio
+    basic-auth-ingress:
+    - name: namespace
+      value: istio-system
+    bootstrap:
+    - name: webhookNamePrefix
+      value: admission-webhook-
+    centraldashboard:
+    - name: overlay
+      value: istio
+    - name: overlay
+      value: application
+    cert-manager:
+    - initRequired: true
+      name: acmeEmail
+      value: james.eby@mavenwave.com
+    cloud-endpoints:
+    - name: secretName
+      value: admin-gcp-sa
+    iap-ingress:
+    - name: namespace
+      value: istio-system
+    - initRequired: true
+      name: ipName
+      value: fin-times-cluster-ip
+    - initRequired: true
+      name: hostname
+      value: fin-times-cluster.endpoints.mwe-james-eby.cloud.goog
+    istio:
+    - name: clusterRbacConfig
+      value: "ON"
+    istio-crds:
+    - name: namespace
+      value: istio-system
+    istio-install:
+    - name: namespace
+      value: istio-system
+    jupyter-web-app:
+    - name: overlay
+      value: istio
+    - name: overlay
+      value: application
+    katib-ui:
+    - name: overlay
+      value: istio
+    metadata:
+    - name: overlay
+      value: istio
+    minio:
+    - name: overlay
+      value: minioPd
+    - name: minioPd
+      value: fin-times-cluster-storage-artifact-store
+    - name: minioPvName
+      value: minio-pv
+    - name: minioPvcName
+      value: minio-pv-claim
+    mysql:
+    - name: overlay
+      value: mysqlPd
+    - name: mysqlPd
+      value: fin-times-cluster-storage-metadata-store
+    - name: mysqlPvName
+      value: mysql-pv
+    - name: mysqlPvcName
+      value: mysql-pv-claim
+    notebook-controller:
+    - name: overlay
+      value: istio
+    - name: injectGcpCredentials
+      value: "true"
+    - name: overlay
+      value: application
+    pipeline:
+    - name: mysqlPd
+      value: dls-kf-storage-metadata-store
+    - name: minioPd
+      value: dls-kf-storage-artifact-store
+    pipelines-ui:
+    - name: overlay
+      value: istio
+    profiles:
+    - name: overlay
+      value: istio
+    - initRequired: true
+      name: admin
+      value: james.eby@mavenwave.com
+    pytorch-operator:
+    - name: overlay
+      value: application
+    spartakus:
+    - initRequired: true
+      name: usageId
+      value: "7209273024971741311"
+    - initRequired: true
+      name: reportUsage
+      value: "true"
+    tensorboard:
+    - name: overlay
+      value: istio
+    tf-job-operator:
+    - name: overlay
+      value: istio
+  components:
+  - istio-crds
+  - istio-install
+  - istio
+  - application-crds
+  - application
+  - metacontroller
+  - argo
+  - centraldashboard
+  - webhook
+  - bootstrap
+  - jupyter-web-app
+  - katib-db
+  - katib-manager
+  - katib-controller
+  - katib-ui
+  - metrics-collector
+  - metadata
+  - suggestion
+  - notebook-controller
+  - pytorch-job-crds
+  - pytorch-operator
+  - spartakus
+  - tensorboard
+  - tf-job-operator
+  - api-service
+  - minio
+  - mysql
+  - persistent-agent
+  - pipelines-runner
+  - pipelines-ui
+  - pipelines-viewer
+  - scheduledworkflow
+  - cert-manager-crds
+  - cert-manager
+  - cloud-endpoints
+  - profiles
+  - gpu-driver
+  - iap-ingress
+  email: james.eby@mavenwave.com
+  enableApplications: true
+  hostname: fin-times-cluster.endpoints.mwe-james-eby.cloud.goog
+  ipName: fin-times-cluster-ip
+  manifestsRepo: /Users/mwloaner366/dev/Maven/GKE-Cluster-With-Harbor-And-Jenkins/cloud-ops/gke/fin-times-cluster-gke/fin-times-cluster/.cache/manifests/manifests-0.6.1-rc.2
+  packageManager: kustomize
+  packages:
+  - argo
+  - common
+  - examples
+  - admission-webhook
+  - jupyter
+  - katib-v1alpha2
+  - metacontroller
+  - metadata
+  - modeldb
+  - mpi-job
+  - pytorch-job
+  - seldon
+  - tensorboard
+  - tf-serving
+  - tf-training
+  - pipeline
+  - istio
+  - cert-manager
+  - gcp
+  - profiles
+  - application
+  platform: gcp
+  plugins:
+  - name: gcp
+    spec:
+      auth:
+        iap:
+          oAuthClientId: 825376869634-8ev106d3vvg4niq9cqd3jolsmgsg9s78.apps.googleusercontent.com
+          oAuthClientSecret:
+            name: CLIENT_SECRET
+      createPipelinePersistentStorage: true
+  project: mwe-james-eby
+  repo: /Users/mwloaner366/dev/Maven/GKE-Cluster-With-Harbor-And-Jenkins/cloud-ops/gke/fin-times-cluster-gke/fin-times-cluster/.cache/kubeflow/v0.6.1-rc.2/kubeflow
+  repos:
+  - name: kubeflow
+    uri: https://github.com/kubeflow/kubeflow/tarball/v0.6.1-rc.2?archive=tar.gz
+  - name: manifests
+    root: manifests-v0.6.1-rc.2
+    uri: https://github.com/kubeflow/manifests/archive/v0.6.1-rc.2.tar.gz
+  secrets:
+  - name: CLIENT_SECRET
+    secretSource:
+      envSource:
+        Name: CLIENT_SECRET
+  serverVersion: file:/Users/mwloaner366/dev/Maven/GKE-Cluster-With-Harbor-And-Jenkins/cloud-ops/gke/fin-times-cluster-gke/fin-times-cluster/.cache/kubeflow/v0.6.1-rc.2/bootstrap/k8sSpec/v1.11.7/api/openapi-spec/swagger.json
+  useBasicAuth: false
+  useIstio: true
+  version: v0.6.1-rc.2
+  zone: us-east1-d
+status:
+  reposCache:
+    kubeflow:
+      localPath: '"/Users/mwloaner366/dev/Maven/GKE-Cluster-With-Harbor-And-Jenkins/cloud-ops/gke/fin-times-cluster-gke/fin-times-cluster/.cache/kubeflow/kubeflow-kubeflow-2c9dfe5"'
+    manifests:
+      localPath: '"/Users/mwloaner366/dev/Maven/GKE-Cluster-With-Harbor-And-Jenkins/cloud-ops/gke/fin-times-cluster-gke/fin-times-cluster/.cache/manifests/manifests-0.6.1-rc.2"'

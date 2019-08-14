@@ -1,0 +1,30 @@
+bindings:
+- members:
+  - serviceAccount:fin-times-cluster-admin@mwe-james-eby.iam.gserviceaccount.com
+  roles:
+  - roles/source.admin
+  - roles/servicemanagement.admin
+  - roles/compute.networkAdmin
+- members:
+  - serviceAccount:fin-times-cluster-user@mwe-james-eby.iam.gserviceaccount.com
+  roles:
+  - roles/cloudbuild.builds.editor
+  - roles/viewer
+  - roles/source.admin
+  - roles/storage.admin
+  - roles/bigquery.admin
+  - roles/dataflow.admin
+  - roles/ml.admin
+  - roles/dataproc.editor
+  - roles/cloudsql.admin
+- members:
+  - serviceAccount:fin-times-cluster-vm@mwe-james-eby.iam.gserviceaccount.com
+  roles:
+  - roles/logging.logWriter
+  - roles/monitoring.metricWriter
+  - roles/monitoring.viewer
+  - roles/storage.objectViewer
+- members:
+  - user:james.eby@mavenwave.com
+  roles:
+  - roles/iap.httpsResourceAccessor

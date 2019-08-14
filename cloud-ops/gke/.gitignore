@@ -1,0 +1,13 @@
+helm
+harbor-helm
+istio-*
+get_helm.sh
+stable-jenkins
+jenkins-*.tgz
+upstream-helm
+CloudLibs
+kfctl*
+.cache
+ks_*
+kf_pipelines_samples
+kf_examples

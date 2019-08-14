@@ -27,11 +27,3 @@ kfctl init $KFAPP_NAME --platform gcp --project $PROJECT
 
 cd $KFAPP_NAME
 kfctl generate all -V
-
-
-
-kfctl apply all -V
-
-echo "You should be able to access https://${KFAPP}.endpoints.${PROJECT}.cloud.goog/ within 20 minutes"
-
-cd ../../../cluster-ops/kubernetes/demo-kubeflow-gke/
