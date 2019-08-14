@@ -9,3 +9,5 @@ CloudLibs
 kfctl*
 .cache
 ks_*
+kf_pipelines_samples
+kf_examples

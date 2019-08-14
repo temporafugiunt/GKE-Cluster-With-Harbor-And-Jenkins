@@ -5,7 +5,7 @@
 #
 
 # Set necessary secrets as environment variables.
-. $CLUSTER_FILES_PATH../../../cloud-ops/gke/demo-kubeflow-gke/.secrets/set-external-resources-environment-variables.sh
+. $CLUSTER_FILES_PATH/../../../cloud-ops/gke/demo-kubeflow-gke/.secrets/set-external-resources-environment-variables.sh
 
 # gcloud init
 # gcloud auth application-default login

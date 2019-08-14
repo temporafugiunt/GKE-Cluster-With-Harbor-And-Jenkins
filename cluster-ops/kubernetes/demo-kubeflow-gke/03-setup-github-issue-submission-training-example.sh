@@ -21,26 +21,49 @@ export COMMON_BASH_FILES_PATH=$COMMON_FILES_PATH/bash-files
 # . activate kubeflow-github
 # conda deactivate
 
-# Add a node with GPU support
-gcloud container node-pools create accel \
+# EXPLICIT GPU SETUP SUPPORT
+# --------------------------
+# # Explicitly adding a node with GPU support
+# gcloud container node-pools create accel \
+#     --project $PROJECT \
+#     --zone $ZONE \
+#     --cluster $KFAPP_NAME \
+#     --accelerator type=nvidia-tesla-k80,count=4 \
+#     --num-nodes 1 \
+#     --machine-type n1-highmem-8 \
+#     --disk-size=220GB \
+#     --scopes cloud-platform \
+#     --verbosity error
+
+# # Add a daemonset that will detect nodes with nvidia hardware and install nvidia drivers for them.
+# kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/stable/nvidia-driver-installer/cos/daemonset-preloaded.yaml
+# --------------------------
+
+gcloud beta container clusters update $KFAPP_NAME \
     --project $PROJECT \
     --zone $ZONE \
-    --cluster $KFAPP_NAME \
-    --accelerator type=nvidia-tesla-k80,count=4 \
-    --num-nodes 1 \
-    --machine-type n1-highmem-8 \
-    --disk-size=220GB \
-    --scopes cloud-platform \
+    --enable-autoprovisioning \
+    --max-cpu 48 \
+    --max-memory 224 \
+    --max-accelerator type=nvidia-tesla-k80,count=4 \
     --verbosity error
-
-# Add a daemonset that will detect nodes with nvidia hardware and install nvidia drivers for them.
-kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/stable/nvidia-driver-installer/cos/daemonset-preloaded.yaml
 
 # Port forwarding reverse proxy to ambassador 
 # kubectl port-forward -n kubeflow svc/ambassador 8080:80
 
-#curl -O https://raw.githubusercontent.com/amygdala/co-snippets/master/ml/kubeflow-pipelines/samples/kubeflow-tf/gh_sum.py
 
+# install ksonnet locally
+. $COMMON_BASH_FILES_PATH/install-ksonnet-locally.sh
+
+# Create a cloud storage bucket that will hold the trained model.
+gsutil.cmd mb -c regional -l $REGION gs://${BUCKET_NAME}
+
+# Install kubeflow pipelines SDK globally as conda can't find it.
+pip install kfp
+
+# INstall yaml support for python
 conda install pyyaml -y
 
-. $COMMON_BASH_FILES_PATH/install-ksonnet-locally.sh
+curl -O https://raw.githubusercontent.com/kubeflow/examples/master/github_issue_summarization/pipelines/example_pipelines/gh_summ.py
+
+python gh_summ.py
