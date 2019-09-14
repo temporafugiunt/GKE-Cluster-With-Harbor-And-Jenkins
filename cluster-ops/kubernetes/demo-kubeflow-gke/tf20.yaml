@@ -1,0 +1,58 @@
+apiVersion: kubeflow.org/v1alpha1
+kind: Notebook
+metadata:
+  creationTimestamp: 2019-08-01T19:34:16Z
+  generation: 1
+  labels:
+    app: tf-2-0-0a-testing
+  name: tf-2-0-0a-testing
+  namespace: kubeflow-james-eby
+  resourceVersion: "72412"
+  selfLink: /apis/kubeflow.org/v1alpha1/namespaces/kubeflow-james-eby/notebooks/tf-2-0-0a-testing
+  uid: 5927723f-b493-11e9-9e1b-42010a8e003e
+spec:
+  template:
+    spec:
+      containers:
+      - env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/gcp-service-account-credentials/user-gcp-sa.json
+        image: gcr.io/kubeflow-images-public/tensorflow-2.0.0a-notebook-cpu:v0.5.0
+        name: tf-2-0-0a-testing
+        resources:
+          limits: {}
+          requests:
+            cpu: "0.5"
+            memory: 1.0Gi
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: workspace-tf-2-0-0a-testing
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /secrets/gcp-service-account-credentials
+          name: gcp-credentials
+          readOnly: true
+      serviceAccountName: default-editor
+      ttlSecondsAfterFinished: 300
+      volumes:
+      - name: workspace-tf-2-0-0a-testing
+        persistentVolumeClaim:
+          claimName: workspace-tf-2-0-0a-testing
+      - emptyDir:
+          medium: Memory
+        name: dshm
+      - name: gcp-credentials
+        secret:
+          defaultMode: 420
+          secretName: user-gcp-sa
+status:
+  conditions:
+  - lastProbeTime: 2019-08-01T19:36:50Z
+    type: Running
+  - lastProbeTime: 2019-08-01T19:34:19Z
+    reason: PodInitializing
+    type: Waiting
+  containerState:
+    running:
+      startedAt: 2019-08-01T19:36:49Z
+  readyReplicas: 1

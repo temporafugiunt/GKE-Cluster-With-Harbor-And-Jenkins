@@ -1,0 +1,58 @@
+apiVersion: kubeflow.org/v1alpha1
+kind: Notebook
+metadata:
+  creationTimestamp: 2019-08-13T20:44:44Z
+  generation: 1
+  labels:
+    app: parallel-do-testing
+  name: parallel-do-testing
+  namespace: kubeflow-james-eby
+  resourceVersion: "5563218"
+  selfLink: /apis/kubeflow.org/v1alpha1/namespaces/kubeflow-james-eby/notebooks/parallel-do-testing
+  uid: 2e98eeb2-be0b-11e9-a4ae-42010a8e00c3
+spec:
+  template:
+    spec:
+      containers:
+      - env: 
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/gcp-service-account-credentials/user-gcp-sa.json
+        image: gcr.io/kubeflow-images-public/tensorflow-1.13.1-notebook-cpu:v0.5.0
+        name: parallel-do-testing
+        resources:
+          limits: {}
+          requests:
+            cpu: "0.5"
+            memory: 1.0Gi
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: workspace-parallel-do-testing
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /secrets/gcp-service-account-credentials
+          name: gcp-credentials
+          readOnly: true
+      serviceAccountName: default-editor
+      ttlSecondsAfterFinished: 300
+      volumes:
+      - name: workspace-parallel-do-testing
+        persistentVolumeClaim:
+          claimName: workspace-parallel-do-testing
+      - emptyDir:
+          medium: Memory
+        name: dshm
+      - name: gcp-credentials
+        secret:
+          defaultMode: 420
+          secretName: user-gcp-sa
+status:
+  conditions:
+  - lastProbeTime: 2019-08-13T20:45:01Z
+    type: Running
+  - lastProbeTime: 2019-08-13T20:44:48Z
+    reason: PodInitializing
+    type: Waiting
+  containerState:
+    running:
+      startedAt: 2019-08-13T20:45:00Z
+  readyReplicas: 1

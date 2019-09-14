@@ -44,3 +44,7 @@ echo "${FSADDR} is the NFS address."
 
 helm install stable/nfs-client-provisioner --name nfs-cp --set nfs.server=${FSADDR} --set nfs.path=/volumes
 # kubectl rollout status  deploy/nfs-cp-nfs-client-provisioner -n kubeflow
+
+# With istio automatic sidecar injection we get failures in kaniko related builds
+kubectl label ns kubeflow-james-eby istio-injection=disabled
+
